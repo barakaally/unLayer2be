@@ -1,0 +1,30 @@
+{
+  "name": "unlayer2beefree",
+  "version": "1.0.0",
+  "description": "Convert Ulayer Email template json formart to Beeefree email template json format and vise-vesa ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/index.js",
+    "tsc":"tsc index.ts",
+    "build": "npm run tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barakaally/unLayer2beefree.git"
+  },
+  "keywords": [
+    "unlayer",
+    "beefree",
+    "email-editor"
+  ],
+  "author": "Baraka ally <baraka.ally.co.tz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/barakaally/unLayer2beefree/issues"
+  },
+  "homepage": "https://github.com/barakaally/unLayer2beefree#readme",
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}
