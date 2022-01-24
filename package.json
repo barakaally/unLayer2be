@@ -2,11 +2,12 @@
   "name": "unlayer2beefree",
   "version": "1.0.0",
   "description": "Convert Ulayer Email template json formart to Beeefree email template json format and vise-vesa ",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/index.js",
-    "tsc":"tsc index.ts",
+    "start": "node lib/index.js",
+    "tsc":"tsc",
     "build": "npm run tsc"
   },
   "repository": {

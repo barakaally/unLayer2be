@@ -36,7 +36,7 @@ export class Container {
 }
 
 export class Module  {
-    descriptor:Descriptor|any
+    descriptor:Descriptor;
     locked: boolean;
     type:string| "mailup-bee-newsletter-modules-empty"|"mailup-bee-newsletter-modules-text"
 }
