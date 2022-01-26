@@ -13,4 +13,4 @@ Convert Beeefree Email template json formart to Unlayer email template json form
 
 ### Get UnlayerEmailJson from BeefreeEmailJson Url encoded string
 
-``` const design=Unlayer2be.design('beefree url encoded string');  ```
+``` const design=Unlayer2be.from('beefree url encoded string');  ```
