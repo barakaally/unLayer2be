@@ -3,11 +3,7 @@ import { UnlayerEmailJson } from "./UnlayerEmailJson";
 
 export class Unlayer2be {
 
-    static from(data: BeefreeDesign | string) {
-        
-        if (typeof data === 'string')
-            return new UnlayerEmailJson().fromString(data);
-
-        return new UnlayerEmailJson().fromObject(data);
-    }
+    static from=(data:string)=>new UnlayerEmailJson().fromString(data);
+    
+    static fromDesign=(data: BeefreeDesign)=>new UnlayerEmailJson().fromDesign(data);
 }

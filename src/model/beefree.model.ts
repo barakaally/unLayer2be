@@ -77,6 +77,8 @@ export class Text{
 export class Style {
     color: string;
     "font-family": string;
+    "font-size": string;
+    "text-align": string;
     "background-color": string;
     "background-image": string;
     "background-position": string;
@@ -92,5 +94,9 @@ export class Style {
     "padding-top": string;
     "line-height": string;
     "linkColor": string;
+    "link-style":string;
+    "border-radius":string;
+    padding: any;
+    align: any;
     
 }
