@@ -1,6 +1,6 @@
 export class UnlayerDesign {
     counters: Counter;
-    body:Body;
+    body: Body;
     schemaVersion: number;
 }
 
@@ -79,6 +79,11 @@ export class Values {
     columns: boolean;
     columnsBackgroundColor: string;
     hideDesktop: boolean;
+    src: {
+        height: number
+        url: string;
+        width: number;
+    }
 }
 
 export class FontFamily {

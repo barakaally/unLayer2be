@@ -44,7 +44,7 @@ export class UnlayerEmailJson {
 
                     design.body = {
                         rows: this.mapBeRow2Unlayer(data["page"]["rows"]),
-                        values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style) as any
+                        values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style, '', `u_content_body_1`) as any
                     };
 
                     break;
@@ -81,10 +81,10 @@ export class UnlayerEmailJson {
      * @param modules Module[]
      * @returns Unlayer Content[]
      */
-    mapBeModule2Unlayer = (modules: Module[]) => modules.map(m => {
+    mapBeModule2Unlayer = (modules: Module[]) => modules.map((m, i) => {
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
-            values: this.mapBeDescriptor2Unlayer(m.descriptor)
+            values: this.mapBeDescriptor2Unlayer(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i}`)
         }
     })
     /**
@@ -92,11 +92,18 @@ export class UnlayerEmailJson {
      * @param descriptor Descriptor
      * @returns Unlayer Values
      */
-    mapBeDescriptor2Unlayer = (descriptor: Descriptor) => Object.assign({}, {
+    mapBeDescriptor2Unlayer = (descriptor: Descriptor, id_type: string) => Object.assign({}, {
         ...descriptor.computedStyle,
         ...descriptor.style,
-        ...this.mapBeStyle2Unlayer(descriptor?.text?.style, descriptor?.text?.html),
-        ...descriptor?.text?.computedStyle
+        ...this.mapBeStyle2Unlayer(descriptor?.text?.style, descriptor?.text?.html, id_type),
+        ...descriptor?.text?.computedStyle,
+        ...{
+            src: {
+                height: "auto",
+                width: "auto",
+                url: descriptor.image.src
+            }
+        }
 
     });
     /**
@@ -105,7 +112,7 @@ export class UnlayerEmailJson {
      * @param text html
      * @returns Unlayer Values
      */
-    mapBeStyle2Unlayer = (style: Style, text?: string) => style ? Object.assign({}, {
+    mapBeStyle2Unlayer = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
         headingType: "h1",
         fontFamily: {
@@ -118,8 +125,8 @@ export class UnlayerEmailJson {
         linkStyle: style["link-style"],
         displayCondition: null,
         _meta: {
-            htmlID: "",
-            htmlClassNames: ""
+            htmlID: id_type,
+            htmlClassNames: id_type?.replace("_1", "")
         },
         selectable: true,
         draggable: true,
@@ -168,7 +175,7 @@ export class UnlayerEmailJson {
         preheaderText: "",
         columns: false,
         columnsBackgroundColor: '',
-        hideDesktop: false
+        hideDesktop: false,
     }) : {};
 }
 

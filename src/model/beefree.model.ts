@@ -1,60 +1,60 @@
-export class BeefreeDesign{
-    page:Page 
+export class BeefreeDesign {
+    page: Page
 }
 
-export class Page{
-    body:Body;
+export class Page {
+    body: Body;
     description: string;
-    rows:Row[];
-    template:Template;
-    title:string;
+    rows: Row[];
+    template: Template;
+    title: string;
 }
 
 export class Template {
     name: string;
-    type: string|"basic";
+    type: string | "basic";
     version: string
 }
 
-export class Body{
-    container:Container;
+export class Body {
+    container: Container;
     content: Content;
     type: string | "mailup-bee-page-properties";
     webFonts: []
 }
 
 export class Row {
-    columns:Column[];
-    container:Container;
+    columns: Column[];
+    container: Container;
     content: Content;
     locked: boolean;
-    type:string| "one-column-empty"
-}  
+    type: string | "one-column-empty"
+}
 
 export class Container {
-    style:Style|any
+    style: Style | any
 }
 
-export class Module  {
-    descriptor:Descriptor;
+export class Module {
+    descriptor: Descriptor;
     locked: boolean;
-    type:string| "mailup-bee-newsletter-modules-empty"|"mailup-bee-newsletter-modules-text"
+    type: string | "mailup-bee-newsletter-modules-empty" | "mailup-bee-newsletter-modules-text"
 }
 
-export class Column{
+export class Column {
     "grid-columns": number;
     modules: Module[];
-    style:Style|any
+    style: Style | any
 }
 
 
 export class Content {
-    computedStyle:ComputedStyle|any
-    style:Style|any
+    computedStyle: ComputedStyle | any
+    style: Style | any
 }
 
 export class ComputedStyle {
-    linkColor:string;
+    linkColor: string;
     messageBackgroundColor: string;
     messageWidth: string;
     hideContentOnDesktop: boolean;
@@ -62,16 +62,21 @@ export class ComputedStyle {
     rowColStackOnMobile: boolean
 }
 
-export class Descriptor{
-    computedStyle:ComputedStyle|any;
-    style:Style|any;
-    text:Text
+export class Descriptor {
+    computedStyle: ComputedStyle | any;
+    style: Style | any;
+    text: Text;
+    image: {
+        alt: string | "Image",
+        href: string,
+        src: string
+    }
 }
 
-export class Text{
-    computedStyle:ComputedStyle|any;
-    html:string;
-    style:Style|any
+export class Text {
+    computedStyle: ComputedStyle | any;
+    html: string;
+    style: Style | any
 }
 
 export class Style {
@@ -94,9 +99,9 @@ export class Style {
     "padding-top": string;
     "line-height": string;
     "linkColor": string;
-    "link-style":string;
-    "border-radius":string;
+    "link-style": string;
+    "border-radius": string;
     padding: any;
     align: any;
-    
+
 }
