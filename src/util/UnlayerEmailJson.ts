@@ -60,11 +60,19 @@ export class UnlayerEmailJson {
      */
     mapBeRow2Unlayer = (rows: Row[]) => rows.map(r => {
         return {
-            cells: [1],
+            cells: this.mapBeCell2Unlayer(r.columns),
             columns: this.mapBeColumn2Unlayer(r.columns),
             values: this.mapBeStyle2Unlayer(r.container.style)
         } as any
     })
+
+    /**
+     * 
+     * @param columns columns Column[]
+     * @returns number[]
+     */
+    mapBeCell2Unlayer=(columns: Column[])=>columns.map(x=>x["grid-columns"]);
+
     /**
      * 
      * @param columns Column[]
