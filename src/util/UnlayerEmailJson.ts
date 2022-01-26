@@ -101,7 +101,7 @@ export class UnlayerEmailJson {
             src: {
                 height: "auto",
                 width: "auto",
-                url: descriptor.image.src
+                url: descriptor?.image?.src
             }
         }
 
