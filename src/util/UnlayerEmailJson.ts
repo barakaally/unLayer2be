@@ -134,30 +134,8 @@ export class UnlayerEmailJson {
         ...this.mapBeStyle2Unlayer(descriptor.style),
         ...this.mapBeStyle2Unlayer(descriptor?.text?.style ?? descriptor?.button?.style, descriptor?.text?.html ?? descriptor?.button?.label, id_type),
         ...descriptor?.text?.computedStyle,
-        ...{
-            src: {
-                height: "auto",
-                width: "auto",
-                url: descriptor?.image?.src
-            }
-        },
-        ...{
-            buttonColors: {
-                ...this.mapBeStyle2Unlayer(descriptor?.button?.style),
-                backgroundColor: "#3AAEE0",
-                hoverColor: "#FFFFFF",
-                hoverBackgroundColor: "#3AAEE0",
-            }
-        },
-        ...{
-            href: {
-                name: "web",
-                values: {
-                    href: descriptor?.button?.href,
-                    target: "_blank"
-                }
-            }
-        }
+        ...this.mapImage2Unlayer(descriptor?.image?.src),
+        ...this.mapButton2Unlayer(descriptor?.button?.href, descriptor?.button?.style)
 
     });
     /**
@@ -168,6 +146,7 @@ export class UnlayerEmailJson {
      */
     mapBeStyle2Unlayer = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
+        color: this.mapColor2Unlayer(style.color),
         headingType: "",
         fontFamily: style["font-family"] ? {
             label: "Popcorn",
@@ -188,12 +167,6 @@ export class UnlayerEmailJson {
         deletable: true,
         hideable: false,
         text: text,
-        buttonColors: {
-            color: this.mapColor2Unlayer(style.color),
-            backgroundColor: this.mapColor2Unlayer(style["background-color"]),
-            hoverColor: this.mapColor2Unlayer(style?.linkColor),
-            hoverBackgroundColor: this.mapColor2Unlayer(style["background-color"])
-        },
         size: {
             autoWidth: true,
             width: style?.width
@@ -254,6 +227,43 @@ export class UnlayerEmailJson {
                 break;
         }
     }
+    /**
+     * 
+     * @param src 
+     * @param width 
+     * @param height 
+     * @returns 
+     */
+    mapImage2Unlayer = (src: string, width: string = "auto", height: string = "auto") => Object.assign({}, {
+        src: {
+            height: height,
+            width: width,
+            url: src
+        }
+    });
+
+    /**
+     * 
+     * @param href 
+     * @param style 
+     * @returns 
+     */
+    mapButton2Unlayer = (href: string, style: Style) => Object.assign({}, {
+        buttonColors: {
+            ...this.mapBeStyle2Unlayer(style),
+            backgroundColor: "#3AAEE0",
+            hoverColor: "#FFFFFF",
+            hoverBackgroundColor: "#3AAEE0",
+        },
+        href: {
+            name: "web",
+            values: {
+                href: href,
+                target: "_blank"
+            }
+        }
+    });
+
 
 }
 

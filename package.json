@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run tsc&&mocha lib/**/*.spec.js",
     "start": "node lib/index.js",
     "tsc": "tsc",
     "build": "npm run tsc"
@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/barakaally/unLayer2be#readme",
   "devDependencies": {
+    "@types/mocha": "^9.1.0",
+    "mocha": "^9.2.0",
     "typescript": "^4.5.5"
   },
   "dependencies": {}
