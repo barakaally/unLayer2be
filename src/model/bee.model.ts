@@ -1,4 +1,4 @@
-export class BeefreeDesign {
+export class BeeDesign {
     page: Page
 }
 

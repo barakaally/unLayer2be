@@ -1,14 +1,14 @@
-import { BeefreeDesign, Body, Column, ComputedStyle, Descriptor, Module, Row, Style } from "../model/beefree.model";
+import { BeeDesign, Body, Column, ComputedStyle, Descriptor, Module, Row, Style } from "../model/bee.model";
 import { Body as UBody } from "../model/unlayer.model";
 import { UnlayerDesign } from "../model/unlayer.model";
 
 export class UnlayerEmailJson {
     /**
      * 
-     * @param data BeefreeDesign
+     * @param data BeeDesign
      * @returns UnlayerDesign
      */
-    fromDesign = (data: BeefreeDesign): UnlayerDesign => this.getDesign(data as BeefreeDesign);
+    fromDesign = (data: BeeDesign): UnlayerDesign => this.getDesign(data as BeeDesign);
     /**
      * 
      * @param data string @description Beefee url encode string
@@ -16,7 +16,7 @@ export class UnlayerEmailJson {
      */
     fromString(data: string): UnlayerDesign {
 
-        let design = {} as UnlayerDesign | BeefreeDesign;
+        let design = {} as UnlayerDesign | BeeDesign;
 
         if (typeof data === 'string') {
             design = JSON.parse(decodeURIComponent(data));
@@ -25,15 +25,15 @@ export class UnlayerEmailJson {
         if (!Object.keys(design).includes("page"))
             return design as UnlayerDesign;
         else
-            return this.getDesign(design as BeefreeDesign);
+            return this.getDesign(design as BeeDesign);
     }
 
     /**
      * 
-     * @param data BeefreeDesign
+     * @param data BeeDesign
      * @returns UnlayerDesign
      */
-    getDesign(data: BeefreeDesign) {
+    getDesign(data: BeeDesign) {
 
         let design = {} as UnlayerDesign;
 
@@ -47,6 +47,18 @@ export class UnlayerEmailJson {
                         values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style, '', `u_content_body_1`) as any
                     };
 
+                    break;
+                case "description":
+                    design.counters = {
+                        u_column: 1,
+                        u_row: 1,
+                        u_content_button: 1,
+                        u_content_heading: 1,
+                        u_content_text: 1
+                    }
+                    break;
+                case "template":
+                    design.schemaVersion = 7;
                     break;
             }
         })
@@ -71,7 +83,7 @@ export class UnlayerEmailJson {
      * @param columns columns Column[]
      * @returns number[]
      */
-    mapBeCell2Unlayer=(columns: Column[])=>columns.map(x=>x["grid-columns"]);
+    mapBeCell2Unlayer = (columns: Column[]) => columns.map(x => x["grid-columns"]);
 
     /**
      * 

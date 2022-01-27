@@ -1,17 +1,17 @@
-import { BeefreeDesign } from "../model/beefree.model";
+import { BeeDesign } from "../model/bee.model";
 import { UnlayerEmailJson } from "./UnlayerEmailJson";
 
 export class Unlayer2be {
     /**
-     * @description get unlayer design from beefree url encoded design json
-     * @param data string @description Beefree url encoded design Json
+     * @description get unlayer design from bee url encoded design json
+     * @param data string @description Bee url encoded design Json
      * @returns UnlayerDesin @description Unlayer design Json
      */
     static from = (data: string) => new UnlayerEmailJson().fromString(data);
     /**
-     * @description get unlayer design from beefree design json
-     * @param data BeefreeDesign  @description Beefree design Json
+     * @description get unlayer design from bee design json
+     * @param data BeeDesign  @description Bee design Json
      * @returns UnlayerDesign @description Unlayer design Json
      */
-    static design = (data: BeefreeDesign) => new UnlayerEmailJson().fromDesign(data);
+    static design = (data: BeeDesign) => new UnlayerEmailJson().fromDesign(data);
 }
