@@ -143,7 +143,7 @@ export class UnlayerEmailJson {
         containerPadding: style?.padding,
         headingType: "h1",
         fontFamily: {
-            label: "Bee free font",
+            label: "Bee font",
             value: style["font-family"]
         },
         fontSize: style["font-size"],
