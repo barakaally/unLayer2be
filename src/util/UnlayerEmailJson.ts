@@ -153,7 +153,7 @@ export class UnlayerEmailJson {
         displayCondition: null,
         _meta: {
             htmlID: id_type,
-            htmlClassNames: id_type?.replace("_1", "")
+            htmlClassNames: id_type?.replace(/_\d/g, "")
         },
         selectable: true,
         draggable: true,
