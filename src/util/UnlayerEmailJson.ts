@@ -81,7 +81,7 @@ export class UnlayerEmailJson {
         return {
             cells: this.mapBeCell2Unlayer(r.columns),
             columns: this.mapBeColumn2Unlayer(r.columns),
-            values: this.mapBeStyle2Unlayer(r.container.style, '', `u_row_${i}`)
+            values: this.mapBeStyle2Unlayer(r.container.style, '', `u_row_${i+1}`)
         } as any
     })
 
@@ -97,10 +97,10 @@ export class UnlayerEmailJson {
      * @param columns Column[]
      * @returns Unlayer Column[]
      */
-    mapBeColumn2Unlayer = (columns: Column[]) => columns.map(c => {
+    mapBeColumn2Unlayer = (columns: Column[]) => columns.map((c,i) => {
         return {
             contents: this.mapBeModule2Unlayer(c.modules),
-            values: this.mapBeStyle2Unlayer(c.style),
+            values: this.mapBeStyle2Unlayer(c.style,'',`u_column_${i+1}`),
         }
     });
     /**
@@ -111,7 +111,7 @@ export class UnlayerEmailJson {
     mapBeModule2Unlayer = (modules: Module[]) => modules.map((m, i) => {
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
-            values: this.mapBeDescriptor2Unlayer(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i}`)
+            values: this.mapBeDescriptor2Unlayer(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i+1}`)
         }
     })
     /**
