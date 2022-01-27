@@ -27,5 +27,6 @@
   "homepage": "https://github.com/barakaally/unLayer2be#readme",
   "devDependencies": {
     "typescript": "^4.5.5"
-  }
+  },
+  "dependencies": {}
 }
