@@ -3,6 +3,13 @@ import { Body as UBody } from "../model/unlayer.model";
 import { UnlayerDesign } from "../model/unlayer.model";
 
 export class UnlayerEmailJson {
+
+    private columns: number = 0;
+    private rows: number = 0;
+    private headings: number = 0;
+    private buttons: number = 0;
+    private texts: number = 0;
+
     /**
      * 
      * @param data BeeDesign
@@ -57,11 +64,11 @@ export class UnlayerEmailJson {
                     break;
                 case "description":
                     design.counters = {
-                        u_column: 1,
-                        u_row: 1,
-                        u_content_button: 1,
-                        u_content_heading: 1,
-                        u_content_text: 1
+                        u_column: this.columns,
+                        u_row: this.rows,
+                        u_content_button: this.buttons,
+                        u_content_heading: this.headings,
+                        u_content_text: this.texts
                     }
                     break;
                 case "template":
@@ -78,6 +85,7 @@ export class UnlayerEmailJson {
      * @returns UnLayer Row[]
      */
     mapBeRow2Unlayer = (rows: Row[]) => rows.map((r, i) => {
+        this.countUnlayerElement("row");
         return {
             cells: this.mapBeCell2Unlayer(r.columns),
             columns: this.mapBeColumn2Unlayer(r.columns),
@@ -98,6 +106,7 @@ export class UnlayerEmailJson {
      * @returns Unlayer Column[]
      */
     mapBeColumn2Unlayer = (columns: Column[]) => columns.map((c, i) => {
+        this.countUnlayerElement("column");
         return {
             contents: this.mapBeModule2Unlayer(c.modules),
             values: this.mapBeStyle2Unlayer(c.style, '', `u_column_${i + 1}`),
@@ -109,6 +118,7 @@ export class UnlayerEmailJson {
      * @returns Unlayer Content[]
      */
     mapBeModule2Unlayer = (modules: Module[]) => modules.map((m, i) => {
+        this.countUnlayerElement(m.type.split('-')[m.type.split('-').length - 1]);
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
             values: this.mapBeDescriptor2Unlayer(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`)
@@ -210,6 +220,31 @@ export class UnlayerEmailJson {
      * @returns String
      */
     mapColor2Unlayer = (color: string) => color === "transparent" ? "" : color;
+
+    /**
+     * 
+     * @param type String @description unlayer element type
+     */
+    countUnlayerElement(type: string): void {
+        switch (type) {
+            case "row":
+                this.rows += 1;
+                break;
+            case "column":
+                this.columns += 1;
+                break;
+            case "button":
+                this.buttons += 1;
+                break;
+            case "heading":
+                this.headings += 1;
+                break;
+            case "text":
+                this.texts += 1;
+                break;
+        }
+    }
+
 }
 
 
