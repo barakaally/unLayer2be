@@ -51,7 +51,7 @@ export class UnlayerEmailJson {
 
                     design.body = {
                         rows: this.mapBeRow2Unlayer(data["page"]["rows"]),
-                        values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style, '', `u_content_body_1`) as any
+                        values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style, '', `u_body`) as any
                     };
 
                     break;
