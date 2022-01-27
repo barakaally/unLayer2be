@@ -169,10 +169,10 @@ export class UnlayerEmailJson {
             }
         },
         buttonColors: {
-            color: style.color,
-            backgroundColor: style["background-color"],
-            hoverColor: style?.linkColor,
-            hoverBackgroundColor: style["background-color"]
+            color: this.mapColor2Unlayer(style.color),
+            backgroundColor: this.mapColor2Unlayer(style["background-color"]),
+            hoverColor: this.mapColor2Unlayer(style?.linkColor),
+            hoverBackgroundColor: this.mapColor2Unlayer(style["background-color"])
         },
         size: {
             autoWidth: true,
@@ -188,8 +188,8 @@ export class UnlayerEmailJson {
         borderRadius: style["border-radius"],
         calculatedWidth: null,
         calculatedHeight: null,
-        textColor: style["color"],
-        backgroundColor: style["background-color"],
+        textColor: this.mapColor2Unlayer(style["color"]),
+        backgroundColor: this.mapColor2Unlayer(style["background-color"]),
         backgroundImage: {
             url: style["background-image"],
             fullWidth: false,
@@ -204,6 +204,12 @@ export class UnlayerEmailJson {
         columnsBackgroundColor: '',
         hideDesktop: false,
     }) : {};
+    /**
+     * 
+     * @param color string
+     * @returns String
+     */
+    mapColor2Unlayer = (color: string) => color === "transparent" ? "" : color;
 }
 
 
