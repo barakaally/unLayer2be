@@ -131,14 +131,31 @@ export class UnlayerEmailJson {
      */
     mapBeDescriptor2Unlayer = (descriptor: Descriptor, id_type: string) => Object.assign({}, {
         ...descriptor.computedStyle,
-        ...descriptor.style,
-        ...this.mapBeStyle2Unlayer(descriptor?.text?.style, descriptor?.text?.html, id_type),
+        ...this.mapBeStyle2Unlayer(descriptor.style),
+        ...this.mapBeStyle2Unlayer(descriptor?.text?.style ?? descriptor?.button?.style, descriptor?.text?.html ?? descriptor?.button?.label, id_type),
         ...descriptor?.text?.computedStyle,
         ...{
             src: {
                 height: "auto",
                 width: "auto",
                 url: descriptor?.image?.src
+            }
+        },
+        ...{
+            buttonColors: {
+                ...this.mapBeStyle2Unlayer(descriptor?.button?.style),
+                backgroundColor: "#3AAEE0",
+                hoverColor: "#FFFFFF",
+                hoverBackgroundColor: "#3AAEE0",
+            }
+        },
+        ...{
+            href: {
+                name: "web",
+                values: {
+                    href: descriptor?.button?.href,
+                    target: "_blank"
+                }
             }
         }
 
@@ -171,13 +188,6 @@ export class UnlayerEmailJson {
         deletable: true,
         hideable: false,
         text: text,
-        href: {
-            name: "web",
-            values: {
-                href: "",
-                target: "_blank"
-            }
-        },
         buttonColors: {
             color: this.mapColor2Unlayer(style.color),
             backgroundColor: this.mapColor2Unlayer(style["background-color"]),

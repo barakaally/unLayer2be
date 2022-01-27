@@ -70,6 +70,11 @@ export class Descriptor {
         alt: string | "Image",
         href: string,
         src: string
+    };
+    button:{
+        href: string,
+        label:string,
+        style:Style
     }
 }
 
@@ -101,6 +106,8 @@ export class Style {
     "linkColor": string;
     "link-style": string;
     "border-radius": string;
+    height: number;
+    hideContentOnMobile: boolean;
     padding: any;
     align: any;
 
