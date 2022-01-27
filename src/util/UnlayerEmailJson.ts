@@ -19,7 +19,14 @@ export class UnlayerEmailJson {
         let design = {} as UnlayerDesign | BeeDesign;
 
         if (typeof data === 'string') {
-            design = JSON.parse(decodeURIComponent(data));
+
+            try {
+                design = JSON.parse(decodeURIComponent(data));
+            }
+            catch (error) {
+                design = JSON.parse(unescape(data));
+            }
+
         }
 
         if (!Object.keys(design).includes("page"))
