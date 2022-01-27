@@ -77,11 +77,11 @@ export class UnlayerEmailJson {
      * @param rows Row[]
      * @returns UnLayer Row[]
      */
-    mapBeRow2Unlayer = (rows: Row[]) => rows.map(r => {
+    mapBeRow2Unlayer = (rows: Row[]) => rows.map((r, i) => {
         return {
             cells: this.mapBeCell2Unlayer(r.columns),
             columns: this.mapBeColumn2Unlayer(r.columns),
-            values: this.mapBeStyle2Unlayer(r.container.style)
+            values: this.mapBeStyle2Unlayer(r.container.style, '', `u_row_${i}`)
         } as any
     })
 
