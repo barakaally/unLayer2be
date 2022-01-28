@@ -249,12 +249,30 @@ export class UnlayerEmailJson {
      * @returns 
      */
     mapButton2Unlayer = (href: string, style: Style) => Object.assign({}, {
+        ...this.mapButtonColors(style),
+        ...this.mapLink(href)
+    });
+
+    /**
+     * 
+     * @param style 
+     * @returns 
+     */
+    mapButtonColors = (style: Style) => Object.assign({}, {
         buttonColors: {
             ...this.mapBeStyle2Unlayer(style),
             backgroundColor: "#3AAEE0",
             hoverColor: "#FFFFFF",
             hoverBackgroundColor: "#3AAEE0",
-        },
+        }
+    });
+
+    /**
+     * 
+     * @param href 
+     * @returns 
+     */
+    mapLink = (href: string) => Object.assign({}, {
         href: {
             name: "web",
             values: {
