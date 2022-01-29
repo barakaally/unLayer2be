@@ -66,12 +66,8 @@ export class Descriptor {
     computedStyle: ComputedStyle | any;
     style: Style | any;
     text: Text;
-    image: {
-        alt: string | "Image",
-        href: string,
-        src: string
-    };
-    button:Button
+    image: Image;
+    button: Button
 }
 
 export class Text {
@@ -81,9 +77,15 @@ export class Text {
 }
 
 export class Button {
-        href: string;
-        label:string;
-        style:Style;
+    href: string;
+    label: string;
+    style: Style;
+}
+
+export class Image {
+    alt: string | "Image";
+    href: string;
+    src: string;
 }
 
 export class Style {
