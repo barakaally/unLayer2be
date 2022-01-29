@@ -51,7 +51,9 @@ export class UnlayerEmailJson {
 
         let design = {} as UnlayerDesign;
 
-        Object.entries(data["page"]).forEach(([key, value]) => {
+        if(!data["page"])throw new Error("design must have page");
+
+        Object.entries(data["page"])?.forEach(([key, value]) => {
 
             switch (key) {
                 case "body":
