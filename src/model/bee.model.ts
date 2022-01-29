@@ -71,17 +71,19 @@ export class Descriptor {
         href: string,
         src: string
     };
-    button:{
-        href: string,
-        label:string,
-        style:Style
-    }
+    button:Button
 }
 
 export class Text {
     computedStyle: ComputedStyle | any;
     html: string;
     style: Style | any
+}
+
+export class Button {
+        href: string;
+        label:string;
+        style:Style;
 }
 
 export class Style {
