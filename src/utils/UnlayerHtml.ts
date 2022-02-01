@@ -6,7 +6,7 @@ export class Unlayerhtml {
     * @param text html
     * @returns Unlayer Values
     */
-    mapHtmlStyle2Unlayer = (style: any, text: string = '', id_type?: string) => style ? Object.assign({}, {
+    htmlStyle2Unlayer = (style: any, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
         color: "",
         headingType: "",
