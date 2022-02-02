@@ -1,5 +1,5 @@
 # unLayer2be
-Convert Beeefree Email template json formart to Unlayer email template json format.
+Convert Beeefree email design to Unlayer email design.
 
 ## Installations
 ```npm install unlayer2be ```
