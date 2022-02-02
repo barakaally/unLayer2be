@@ -1,5 +1,5 @@
 # unLayer2be
-Convert Beeefree email design to Unlayer email design.
+Convert Beefree email design to Unlayer email design.
 
 ## Installations
 ```npm install unlayer2be ```
