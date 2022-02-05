@@ -5,23 +5,26 @@ export class Unlayerhtml {
     window: import("jsdom").DOMWindow;
 
     from(data: string) {
-        console.log(1, data);
+
         let design = {} as UnlayerDesign;
         const body = this.getHtml(data).querySelector("body");
-
+    
         design.body = {
-            rows: Array.from(body?.children ?? []).map((row: any) => {
+            rows: Array.from(body?.children[0].children[0].children[0].children[0].children ?? []).map((row: any) => {
                 return {
                     cells: [12],
-                    columns: Array.from(row.children).map((column: any) => {
+                    columns: Array.from(row.children).map((column: any,i) => {
+                        
                         return {
-                            contents: Array.from(column).map((content: any, i) => {
+                            
+                            contents: Array.from(column.children).map((content: any, i) => {
+                                console.log(`content${i}`,content?.childElementCount);
                                 return {
                                     type: "text",
                                     values: this.htmlStyle2Unlayer(content.style, content.outerHTML, `u_content_${i}`) as any
                                 }
                             }),
-                            values: this.htmlStyle2Unlayer(column?.style, '', `u_column_${1}`) as any,
+                            values: this.htmlStyle2Unlayer(column?.style, '', `u_column_${i}`) as any,
                         }
                     }),
                     values: this.htmlStyle2Unlayer(row.style, '', `u_row_${1}`) as any

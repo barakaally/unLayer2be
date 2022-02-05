@@ -1,6 +1,6 @@
-import { Unlayerhtml } from "./UnlayerHtml";
+import { Unlayerhtml } from "../design/fromHtml";
 import { BeeDesign } from "../model/bee.model";
-import { UnlayerEmailJson } from "./UnlayerEmailJson";
+import { UnlayerEmailJson } from "../design/fromBee";
 
 export class Unlayer2be {
     /**

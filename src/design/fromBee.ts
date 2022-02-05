@@ -151,7 +151,7 @@ export class UnlayerEmailJson {
         color: this.mapColor2Unlayer(style.color),
         headingType: "",
         fontFamily: style["font-family"] ? {
-            label: "Popcorn",
+            label: "Fonts",
             value: style["font-family"]
         } : {},
         fontSize: style["font-size"],
