@@ -56,7 +56,7 @@ export class Html2Unlayer {
     */
     getStyle = (style: any, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
-        color: style["color"],
+        color: this.getColor(style["color"]),
         headingType: "",
         fontFamily: style["font-family"] ? {
             label: "font",
@@ -92,7 +92,7 @@ export class Html2Unlayer {
         calculatedWidth: null,
         calculatedHeight: null,
         textColor: style["color"],
-        backgroundColor: style["background-color"],
+        backgroundColor: this.getColor(style["background-color"]),
         backgroundImage: {
             url: style["background-image"],
             fullWidth: false,
@@ -104,7 +104,14 @@ export class Html2Unlayer {
         contentAlign: "center",
         preheaderText: "",
         columns: id_type?.includes("column"),
-        columnsBackgroundColor: '',
+        columnsBackgroundColor: this.getColor(style["background-color"]),
         hideDesktop: false,
     }) : {};
+
+    /**
+     * 
+     * @param color string
+     * @returns String
+     */
+    getColor = (color: string) => color === "transparent" ? "" : color;
 }
