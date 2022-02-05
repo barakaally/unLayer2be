@@ -14,3 +14,6 @@ Convert BEE email design to Unlayer email design.
 ### Get Unlayer design from BEE design Url encoded string
 
 ``` const design=Unlayer2be.from('beefree url encoded string');  ```
+
+### Sample
+![unlayer](https://unroll-images-production.s3.amazonaws.com/projects/0/1644079641638-unlayer.PNG)
