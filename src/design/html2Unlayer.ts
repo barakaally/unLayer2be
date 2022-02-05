@@ -10,7 +10,8 @@ export class Html2Unlayer {
         const body = HtmlParser.parse(data).querySelector("body");
 
         design.body = {
-            rows: Array.from(body?.children[0].children[0].children[0].children[0].children ?? []).map((row: any, i) => {
+
+            rows: this.getFirstChildren(body).map((row: any, i) => {
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0].children))
                 return {
                     cells: this.getCells(Array.from(row.children[0].children)),
@@ -27,6 +28,27 @@ export class Html2Unlayer {
         return design;
     }
 
+    getFirstChildren = (body: HTMLBodyElement | null) => {
+
+        const a = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT")[0];
+
+        if (a) {
+
+            const b = a?.children[0];
+
+            if (b) {
+                const c = b?.children[0];
+                if (c) {
+                    const d = c?.children[0]
+                    return d ? Array.from(d.children) : []
+                }
+            }
+            //append b,c,d
+            return [];
+        }
+        //append a,b,c,d
+        return [];
+    }
 
     /**
     * 
