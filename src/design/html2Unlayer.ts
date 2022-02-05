@@ -6,12 +6,11 @@ export class Html2Unlayer {
     from(data: string) {
 
         let design = {} as UnlayerDesign;
-
-        const body = HtmlParser.parse(data).querySelector("body");
+        const body = HtmlParser.parseBody(data).querySelector("body");
 
         design.body = {
 
-            rows: this.getFirstChildren(body).map((row: any, i) => {
+            rows: HtmlParser.parseChildren(body).map((row: any, i) => {
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0].children))
                 return {
                     cells: this.getCells(Array.from(row.children[0].children)),
@@ -28,28 +27,6 @@ export class Html2Unlayer {
         return design;
     }
 
-    getFirstChildren = (body: HTMLBodyElement | null) => {
-
-        const a = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT")[0];
-
-        if (a) {
-
-            const b = a?.children[0];
-
-            if (b) {
-                const c = b?.children[0];
-                if (c) {
-                    const d = c?.children[0]
-                    return d ? Array.from(d.children) : []
-                }
-            }
-            //append b,c,d
-            return [];
-        }
-        //append a,b,c,d
-        return [];
-    }
-
     /**
     * 
     * @param columns columns Column[]
@@ -57,10 +34,10 @@ export class Html2Unlayer {
     */
     getCells = (columns: any[]) => {
 
-        const cells = columns.map(x => Array.from(x.children)
-            ?.map((y: any) => Number(y.style._values["min-width"].replace(/[a-zA-Z]+/g, ""))))[0];
+        const cells = columns?.map(x => Array.from(x?.children)
+            ?.map((y: any) => Number(y.style._values["min-width"]?.replace(/[a-zA-Z]+/g, ""))))[0];
 
-        return cells.map(x => Math.round(x / Math.min(...cells)));
+        return cells?.map(x => !isNaN(x) ? Math.round((x / Math.min(...cells))) : 1) ?? [12];
 
     }
 
