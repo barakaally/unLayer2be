@@ -59,7 +59,7 @@ export class Bee2Unlayer {
                 case "body":
 
                     design.body = {
-                        rows: this.mapBeRow2Unlayer(data["page"]["rows"]),
+                        rows: this.getRows(data["page"]["rows"]),
                         values: this.getStyle(data["page"]["body"].container.style, '', `u_body`) as any
                     };
 
@@ -86,7 +86,7 @@ export class Bee2Unlayer {
      * @param rows Row[]
      * @returns UnLayer Row[]
      */
-    mapBeRow2Unlayer = (rows: Row[]) => rows.map((r, i) => {
+    getRows = (rows: Row[]) => rows.map((r, i) => {
         this.countUnlayerElement("row");
         return {
             cells: this.getCells(r.columns),
