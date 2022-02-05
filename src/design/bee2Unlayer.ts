@@ -2,7 +2,7 @@ import { BeeDesign, Body, Column, ComputedStyle, Descriptor, Module, Row, Style 
 import { Body as UBody } from "../model/unlayer.model";
 import { UnlayerDesign } from "../model/unlayer.model";
 
-export class UnlayerEmailJson {
+export class Bee2Unlayer {
 
     private columns: number = 0;
     private rows: number = 0;
@@ -151,7 +151,7 @@ export class UnlayerEmailJson {
         color: this.mapColor2Unlayer(style.color),
         headingType: "",
         fontFamily: style["font-family"] ? {
-            label: "Popcorn",
+            label: "Fonts",
             value: style["font-family"]
         } : {},
         fontSize: style["font-size"],

@@ -28,7 +28,7 @@ export class Column {
     values: Values
 }
 export class Content {
-    type: "heading" | "text" | "html" | "button" | "body";
+    type: "heading" | "text" | "html" | "button" | "body" | "image";
     values: Values
 }
 

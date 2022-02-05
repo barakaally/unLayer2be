@@ -1,5 +1,5 @@
-import { BeeDesign } from "../src/model/bee.model";
-import { UnlayerDesign } from '../src/model/unlayer.model'
+import { BeeDesign } from "./model/bee.model";
+import { UnlayerDesign } from './model/unlayer.model'
 
 export declare class Unlayer2be {
     /**
@@ -14,4 +14,6 @@ export declare class Unlayer2be {
     * @returns UnlayerDesign @description Unlayer design Json
     */
     static design(data: BeeDesign): UnlayerDesign
+
+    static fromHtml(data: string): UnlayerDesign
 }

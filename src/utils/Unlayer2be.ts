@@ -1,5 +1,6 @@
+import { Bee2Unlayer } from "../design/bee2Unlayer";
+import { Html2Unlayer } from "../design/html2Unlayer";
 import { BeeDesign } from "../model/bee.model";
-import { UnlayerEmailJson } from "./UnlayerEmailJson";
 
 export class Unlayer2be {
     /**
@@ -7,11 +8,13 @@ export class Unlayer2be {
      * @param data string @description Bee url encoded design Json
      * @returns UnlayerDesin @description Unlayer design Json
      */
-    static from = (data: string) => new UnlayerEmailJson().fromString(data);
+    static from = (data: string) => new Bee2Unlayer().fromString(data);
     /**
      * @description get unlayer design from bee design json
      * @param data BeeDesign  @description Bee design Json
      * @returns UnlayerDesign @description Unlayer design Json
      */
-    static design = (data: BeeDesign) => new UnlayerEmailJson().fromDesign(data);
+    static design = (data: BeeDesign) => new Bee2Unlayer().fromDesign(data);
+
+    static fromHtml = (data: string) => new Html2Unlayer().from(data);
 }
