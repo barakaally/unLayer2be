@@ -2,7 +2,7 @@ import { BeeDesign, Body, Column, ComputedStyle, Descriptor, Module, Row, Style 
 import { Body as UBody } from "../model/unlayer.model";
 import { UnlayerDesign } from "../model/unlayer.model";
 
-export class UnlayerEmailJson {
+export class Bee2Unlayer {
 
     private columns: number = 0;
     private rows: number = 0;
