@@ -1,19 +1,20 @@
 import { UnlayerDesign } from "../model/unlayer.model";
-import { JSDOM } from 'jsdom';
+import { HtmlParser } from "../utils/htmlParser";
 
 export class Html2Unlayer {
 
     from(data: string) {
 
         let design = {} as UnlayerDesign;
-        const body = this.getHtml(data).querySelector("body");
+
+        const body = HtmlParser.parse(data).querySelector("body");
 
         design.body = {
-            rows: Array.from(body?.children[0].children[0].children[0].children[0].children ?? []).map((row: any) => {
+            rows: Array.from(body?.children[0].children[0].children[0].children[0].children ?? []).map((row: any, i) => {
                 return {
                     cells: this.getCells(Array.from(row.children[0].children)),
                     columns: this.hasMultipleCell(Array.from(row.children[0].children)) ? this.getColumns(row.children[0].children[0].children) : this.getColumns(row.children),
-                    values: this.getStyle(row.style, '', `u_row_${1}`) as any
+                    values: this.getStyle(row.style, '', `u_row_${i + 1}`) as any
                 }
             }),
             values: this.getStyle(body?.style, '', `u_body`) as any
@@ -22,29 +23,35 @@ export class Html2Unlayer {
         return design;
     }
 
-    getHtml = (html: string) => new JSDOM(html).window.document;
 
     /**
     * 
     * @param columns columns Column[]
     * @returns number[]
     */
-    getCells = (columns: any[]) =>
-        columns.map(x => Array.from(x.children)?.map((y: any) => Number(y.style._values["min-width"].replace(/[a-zA-Z]+/g, ""))))[0];
+    getCells = (columns: any[]) => columns.map(x => Array.from(x.children)
+        ?.map((y: any) => Number(y.style._values["min-width"].replace(/[a-zA-Z]+/g, ""))))[0];
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
     getColumns = (rows: any[]) => Array.from(rows).map((column: any, i) => {
         return {
             contents: this.getContents(column) as any[],
-            values: this.getStyle(column?.style, '', `u_column_${i}`) as any,
+            values: this.getStyle(column?.style, '', `u_column_${i + 1}`) as any,
         }
     });
 
     getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
         return {
-            type: "text",
-            values: this.getStyle(content.style, content.outerHTML, `u_content_${i}`) as any
+            type: this.getContentType(content),
+            values: {
+                ...this.getStyle(content.style, content.outerHTML, `u_content_${this.getContentType(content)}_${i + 1}`) as any,
+                ...{
+                    src: {
+                        url: content?.querySelector("img")?.src
+                    }
+                }
+            }
         }
     });
 
@@ -54,7 +61,7 @@ export class Html2Unlayer {
     * @param text html
     * @returns Unlayer Values
     */
-    getStyle = (style: any, text: string = '', id_type?: string) => style ? Object.assign({}, {
+    getStyle = (style: any, text: any = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
         color: this.getColor(style["color"]),
         headingType: "",
@@ -113,5 +120,14 @@ export class Html2Unlayer {
      * @param color string
      * @returns String
      */
-    getColor = (color: string) => color === "transparent" ? "" : color;
+    getColor = (color: string) => color === "transparent" ? "#ffffff" : color;
+
+    getContentType = (content: HTMLElement) => {
+
+        if (content.querySelector("img")) {
+            return "image";
+        }
+
+        return "text";
+    }
 }
