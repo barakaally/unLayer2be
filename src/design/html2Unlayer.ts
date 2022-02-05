@@ -11,9 +11,10 @@ export class Html2Unlayer {
 
         design.body = {
             rows: Array.from(body?.children[0].children[0].children[0].children[0].children ?? []).map((row: any, i) => {
+                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0].children))
                 return {
                     cells: this.getCells(Array.from(row.children[0].children)),
-                    columns: this.hasMultipleCell(Array.from(row.children[0].children)) ? this.getColumns(row.children[0].children[0].children) : this.getColumns(row.children),
+                    columns: hasMultipleCells ? this.getColumns(row.children[0].children[0].children) : this.getColumns(row.children),
                     values: this.getStyle(row.style, '', `u_row_${i + 1}`) as any
                 }
             }),
@@ -29,8 +30,14 @@ export class Html2Unlayer {
     * @param columns columns Column[]
     * @returns number[]
     */
-    getCells = (columns: any[]) => columns.map(x => Array.from(x.children)
-        ?.map((y: any) => Number(y.style._values["min-width"].replace(/[a-zA-Z]+/g, ""))))[0];
+    getCells = (columns: any[]) => {
+
+        const cells = columns.map(x => Array.from(x.children)
+            ?.map((y: any) => Number(y.style._values["min-width"].replace(/[a-zA-Z]+/g, ""))))[0];
+
+        return cells.map(x => Math.round(x / Math.min(...cells)));
+
+    }
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
@@ -48,7 +55,9 @@ export class Html2Unlayer {
                 ...this.getStyle(content.style, content.outerHTML, `u_content_${this.getContentType(content)}_${i + 1}`) as any,
                 ...{
                     src: {
-                        url: content?.querySelector("img")?.src
+                        url: content?.querySelector("img")?.src,
+                        width: "auto",
+                        height: "auto"
                     }
                 }
             }
@@ -120,7 +129,7 @@ export class Html2Unlayer {
      * @param color string
      * @returns String
      */
-    getColor = (color: string) => color === "transparent" ? "#ffffff" : color;
+    getColor = (color: string) => color === "transparent" ? "" : color;
 
     getContentType = (content: HTMLElement) => {
 
