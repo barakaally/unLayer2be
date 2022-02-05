@@ -1,3 +1,4 @@
+import { Unlayerhtml } from "./UnlayerHtml";
 import { BeeDesign } from "../model/bee.model";
 import { UnlayerEmailJson } from "./UnlayerEmailJson";
 
@@ -14,4 +15,6 @@ export class Unlayer2be {
      * @returns UnlayerDesign @description Unlayer design Json
      */
     static design = (data: BeeDesign) => new UnlayerEmailJson().fromDesign(data);
+
+    static fromHtml = (data: string) => new Unlayerhtml().from(data);
 }

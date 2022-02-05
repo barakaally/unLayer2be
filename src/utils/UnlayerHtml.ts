@@ -1,4 +1,45 @@
+import { UnlayerDesign } from "../model/unlayer.model";
+import { JSDOM } from 'jsdom';
+
 export class Unlayerhtml {
+    window: import("jsdom").DOMWindow;
+
+    from(data: string) {
+        console.log(1, data);
+        let design = {} as UnlayerDesign;
+        const body = this.getHtml(data).querySelector("body");
+
+        design.body = {
+            rows: Array.from(body?.children ?? []).map((row: any) => {
+                return {
+                    cells: [12],
+                    columns: Array.from(row.children).map((column: any) => {
+                        return {
+                            contents: Array.from(column).map((content: any, i) => {
+                                return {
+                                    type: "text",
+                                    values: this.htmlStyle2Unlayer(content.style, content.outerHTML, `u_content_${i}`) as any
+                                }
+                            }),
+                            values: this.htmlStyle2Unlayer(column?.style, '', `u_column_${1}`) as any,
+                        }
+                    }),
+                    values: this.htmlStyle2Unlayer(row.style, '', `u_row_${1}`) as any
+                }
+            }),
+            values: this.htmlStyle2Unlayer(body?.style, '', `u_body`) as any
+        };
+
+       // console.log(JSON.stringify(design, null, 4));
+       return design;
+    }
+
+    getHtml = (html: string) => {
+        this.window = new JSDOM(html).window;
+        return this.window.document;
+    }
+
+
 
     /**
     * 

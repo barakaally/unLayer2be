@@ -26,9 +26,12 @@
   },
   "homepage": "https://github.com/barakaally/unLayer2be#readme",
   "devDependencies": {
+    "@types/jsdom": "^16.2.14",
     "@types/mocha": "^9.1.0",
     "mocha": "^9.2.0",
     "typescript": "^4.5.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jsdom": "^19.0.0"
+  }
 }
