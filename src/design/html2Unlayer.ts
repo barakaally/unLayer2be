@@ -15,7 +15,10 @@ export class Html2Unlayer {
                 return {
                     cells: this.getCells(Array.from(row.children[0].children)),
                     columns: hasMultipleCells ? this.getColumns(row.children[0].children[0].children) : this.getColumns(row.children),
-                    values: this.getStyle(row.style, '', `u_row_${i + 1}`) as any
+                    values: {
+                        ...this.getStyle(row.style, '', `u_row_${i + 1}`) as any,
+                        columnsBackgroundColor: hasMultipleCells ? this.getColor(row.children[0].style["background-color"]) : this.getColor(row.style["background-color"]),
+                    }
                 }
             }),
             values: this.getStyle(body?.style, '', `u_body`) as any
@@ -120,7 +123,6 @@ export class Html2Unlayer {
         contentAlign: "center",
         preheaderText: "",
         columns: id_type?.includes("column"),
-        columnsBackgroundColor: this.getColor(style["background-color"]),
         hideDesktop: false,
     }) : {};
 

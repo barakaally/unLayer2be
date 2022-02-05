@@ -148,7 +148,7 @@ export class Bee2Unlayer {
      */
     mapBeStyle2Unlayer = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
-        color: this.mapColor2Unlayer(style.color),
+        color: this.getColor(style.color),
         headingType: "",
         fontFamily: style["font-family"] ? {
             label: "Fonts",
@@ -183,8 +183,8 @@ export class Bee2Unlayer {
         borderRadius: style["border-radius"],
         calculatedWidth: null,
         calculatedHeight: null,
-        textColor: this.mapColor2Unlayer(style["color"]),
-        backgroundColor: this.mapColor2Unlayer(style["background-color"]),
+        textColor: this.getColor(style["color"]),
+        backgroundColor: this.getColor(style["background-color"]),
         backgroundImage: {
             url: style["background-image"],
             fullWidth: false,
@@ -196,7 +196,7 @@ export class Bee2Unlayer {
         contentAlign: "center",
         preheaderText: "",
         columns: id_type?.includes("column"),
-        columnsBackgroundColor: '',
+        columnsBackgroundColor:this.getColor(style["background-color"]),
         hideDesktop: false,
     }) : {};
     /**
@@ -204,7 +204,7 @@ export class Bee2Unlayer {
      * @param color string
      * @returns String
      */
-    mapColor2Unlayer = (color: string) => color === "transparent" ? "" : color;
+    getColor = (color: string) => color === "transparent" ? "" : color;
 
     /**
      * 
