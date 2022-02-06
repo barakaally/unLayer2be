@@ -14,37 +14,28 @@ export class HtmlParser {
 
         if (a) {
 
-            if (a?.children.length > 1) return this.parseParentChildren(a);
+            if (a?.children.length > 1) return Array.from(a.children);
             let b = a?.children[0]
 
             if (b) {
-                if (b?.children.length > 1) return this.parseParentChildren(b);
+
+                if (b?.children.length > 1) return Array.from(b.children);
                 let c = b?.children[0];
                 if (c) {
 
-                    if (c?.children.length > 1) return this.parseParentChildren(c);
+                    if (c?.children.length > 1) return Array.from(c.children)
                     let d = c?.children[0];
 
                     if (d?.children.length > 1) return Array.from(d.children);
+
                     return this.parseParentChildren(d)
 
                 }
 
-                c = this.document.createElement('div');
-                const d = this.document.createElement('div');
-                a.append(c);
-                c.append(d);
-                d.append(b)
-                return Array.from(d.children);
+                return this.parseParentChildren(b)
             }
 
-            b = this.document.createElement('div');
-            const c = this.document.createElement('div');
-            const d = this.document.createElement('div');
-            b.append(c);
-            c.append(d);
-            d.append(a);
-            return Array.from(d.children);
+            return this.parseParentChildren(a);
         }
 
         return [];
