@@ -10,11 +10,11 @@ export class Html2Unlayer {
 
         design.body = {
 
-            rows: HtmlParser.parseChildren(body).map((row: any, i) => {
-                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0].children))
+            rows: HtmlParser.parseRows(body).map((row: any, i) => {
+                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0].children));
                 return {
-                    cells: this.getCells(Array.from(row.children[0].children)),
-                    columns: hasMultipleCells ? this.getColumns(row.children[0].children[0].children) : this.getColumns(row.children),
+                    cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
+                    columns: this.getColumns(HtmlParser.parseColumns(row, hasMultipleCells)),
                     values: {
                         ...this.getStyle(row.style, '', `u_row_${i + 1}`) as any,
                         columnsBackgroundColor: hasMultipleCells ? this.getColor(row.children[0].style["background-color"]) : this.getColor(row.style["background-color"]),
@@ -35,15 +35,14 @@ export class Html2Unlayer {
     getCells = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(x?.children)
-            ?.map((y: any) => Number(y.style._values["min-width"]?.replace(/[a-zA-Z]+/g, ""))))[0];
-
-        return cells?.map(x => !isNaN(x) ? Math.round((x / Math.min(...cells))) : 1) ?? [12];
+            ?.map((y: any) => Number(y.style._values["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
+        return cells[cells.length - 1]?.map(x => !isNaN(x) ? Math.round((x / Math.min(...cells[cells.length - 1]))) : 1) ?? [12];
 
     }
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
-    getColumns = (rows: any[]) => Array.from(rows).map((column: any, i) => {
+    getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(column?.style, '', `u_column_${i + 1}`) as any,
@@ -51,6 +50,7 @@ export class Html2Unlayer {
     });
 
     getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
+
         return {
             type: this.getContentType(content),
             values: {

@@ -6,26 +6,26 @@ export class HtmlParser {
 
     static parseBody = (html: string) => this.document = new JSDOM(html).window.document;
 
-    static parseChildren = (body: HTMLBodyElement | null) => {
+    static parseRows = (body: HTMLBodyElement | null) => {
 
         let a = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT")[0];
 
         if (a) {
 
-            if (a?.children.length > 1) return Array.from(a?.children);
+            if (a?.children.length > 1) return this.parseParentChildren(a);
             let b = a?.children[0]
 
             if (b) {
-                if (b?.children.length > 1) return Array.from(b?.children);
+                if (b?.children.length > 1) return this.parseParentChildren(b);
                 let c = b?.children[0];
                 if (c) {
 
-                    if (c?.children.length > 1) return Array.from(c?.children);
-                    let d = c?.children[0]
-                    if (!d) d = this.document.createElement("div");
-                    if (d?.children.length > 1) return Array.from(d?.children);
-                    c.prepend(d);
-                    return Array.from(d.children);
+                    if (c?.children.length > 1) return this.parseParentChildren(c);
+                    let d = c?.children[0];
+
+                    if (d?.children.length > 1) return Array.from(d.children);
+                    return this.parseParentChildren(d)
+
                 }
 
                 c = this.document.createElement('div');
@@ -56,5 +56,9 @@ export class HtmlParser {
         return [];
     }
 
+    static parseParentChildren = (element: Element) => Array.from(element?.parentElement?.children ?? []);
+
+    static parseColumns = (row: Element, hasMultipleCells: boolean) =>
+       Array.from(hasMultipleCells ? row.children[0]?.children[0]?.children ?? row.children[0]?.children : row.children);
 
 }
