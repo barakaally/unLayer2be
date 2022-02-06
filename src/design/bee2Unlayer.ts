@@ -59,8 +59,8 @@ export class Bee2Unlayer {
                 case "body":
 
                     design.body = {
-                        rows: this.mapBeRow2Unlayer(data["page"]["rows"]),
-                        values: this.mapBeStyle2Unlayer(data["page"]["body"].container.style, '', `u_body`) as any
+                        rows: this.getRows(data["page"]["rows"]),
+                        values: this.getStyle(data["page"]["body"].container.style, '', `u_body`) as any
                     };
 
                     break;
@@ -86,12 +86,12 @@ export class Bee2Unlayer {
      * @param rows Row[]
      * @returns UnLayer Row[]
      */
-    mapBeRow2Unlayer = (rows: Row[]) => rows.map((r, i) => {
+    getRows = (rows: Row[]) => rows.map((r, i) => {
         this.countUnlayerElement("row");
         return {
-            cells: this.mapBeCell2Unlayer(r.columns),
-            columns: this.mapBeColumn2Unlayer(r.columns),
-            values: this.mapBeStyle2Unlayer(r.container.style, '', `u_row_${i + 1}`)
+            cells: this.getCells(r.columns),
+            columns: this.getColumns(r.columns),
+            values: this.getStyle(r.container.style, '', `u_row_${i + 1}`)
         } as any
     })
 
@@ -100,18 +100,18 @@ export class Bee2Unlayer {
      * @param columns columns Column[]
      * @returns number[]
      */
-    mapBeCell2Unlayer = (columns: Column[]) => columns.map(x => x["grid-columns"]);
+    getCells = (columns: Column[]) => columns.map(x => x["grid-columns"]);
 
     /**
      * 
      * @param columns Column[]
      * @returns Unlayer Column[]
      */
-    mapBeColumn2Unlayer = (columns: Column[]) => columns.map((c, i) => {
+    getColumns = (columns: Column[]) => columns.map((c, i) => {
         this.countUnlayerElement("column");
         return {
-            contents: this.mapBeModule2Unlayer(c.modules),
-            values: this.mapBeStyle2Unlayer(c.style, '', `u_column_${i + 1}`),
+            contents: this.getContents(c.modules),
+            values: this.getStyle(c.style, '', `u_column_${i + 1}`),
         }
     });
     /**
@@ -119,11 +119,11 @@ export class Bee2Unlayer {
      * @param modules Module[]
      * @returns Unlayer Content[]
      */
-    mapBeModule2Unlayer = (modules: Module[]) => modules.map((m, i) => {
+    getContents = (modules: Module[]) => modules.map((m, i) => {
         this.countUnlayerElement(m.type.split('-')[m.type.split('-').length - 1]);
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
-            values: this.mapBeDescriptor2Unlayer(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`)
+            values: this.getValues(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`)
         }
     })
     /**
@@ -131,13 +131,13 @@ export class Bee2Unlayer {
      * @param descriptor Descriptor
      * @returns Unlayer Values
      */
-    mapBeDescriptor2Unlayer = (descriptor: Descriptor, id_type: string) => Object.assign({}, {
+    getValues = (descriptor: Descriptor, id_type: string) => Object.assign({}, {
         ...descriptor.computedStyle,
-        ...this.mapBeStyle2Unlayer(descriptor.style),
-        ...this.mapBeStyle2Unlayer(descriptor?.text?.style ?? descriptor?.button?.style, descriptor?.text?.html ?? descriptor?.button?.label, id_type),
+        ...this.getStyle(descriptor.style),
+        ...this.getStyle(descriptor?.text?.style ?? descriptor?.button?.style, descriptor?.text?.html ?? descriptor?.button?.label, id_type),
         ...descriptor?.text?.computedStyle,
-        ...this.mapImage2Unlayer(descriptor?.image?.src),
-        ...this.mapButton2Unlayer(descriptor?.button?.href, descriptor?.button?.style)
+        ...this.getImage(descriptor?.image?.src),
+        ...this.getButton(descriptor?.button?.href, descriptor?.button?.style)
 
     });
     /**
@@ -146,7 +146,7 @@ export class Bee2Unlayer {
      * @param text html
      * @returns Unlayer Values
      */
-    mapBeStyle2Unlayer = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
+    getStyle = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
         containerPadding: style?.padding,
         color: this.getColor(style.color),
         headingType: "",
@@ -236,7 +236,7 @@ export class Bee2Unlayer {
      * @param height 
      * @returns 
      */
-    mapImage2Unlayer = (src: string, width: string = "auto", height: string = "auto") => Object.assign({}, {
+    getImage = (src: string, width: string = "auto", height: string = "auto") => Object.assign({}, {
         src: {
             height: height,
             width: width,
@@ -250,7 +250,7 @@ export class Bee2Unlayer {
      * @param style 
      * @returns 
      */
-    mapButton2Unlayer = (href: string, style: Style) => Object.assign({}, {
+    getButton = (href: string, style: Style) => Object.assign({}, {
         ...this.mapButtonColors(style),
         ...this.mapLink(href)
     });
@@ -262,7 +262,7 @@ export class Bee2Unlayer {
      */
     mapButtonColors = (style: Style) => Object.assign({}, {
         buttonColors: {
-            ...this.mapBeStyle2Unlayer(style),
+            ...this.getStyle(style),
             backgroundColor: "#3AAEE0",
             hoverColor: "#FFFFFF",
             hoverBackgroundColor: "#3AAEE0",
