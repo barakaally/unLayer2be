@@ -8,7 +8,9 @@ export class HtmlParser {
 
     static parseRows = (body: HTMLBodyElement | null) => {
 
-        let a = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT")[0];
+        const children = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE");
+        if (children.length > 1) return Array.from(children);
+        let a = children[0];
 
         if (a) {
 
@@ -45,20 +47,12 @@ export class HtmlParser {
             return Array.from(d.children);
         }
 
-        a = this.document.createElement('div');
-        const b = this.document.createElement('div');
-        const c = this.document.createElement('div');
-        const d = this.document.createElement('div');
-        body?.append(a)
-        a.append(b);
-        b.append(c);
-        c.append(d);
         return [];
     }
 
     static parseParentChildren = (element: Element) => Array.from(element?.parentElement?.children ?? []);
 
     static parseColumns = (row: Element, hasMultipleCells: boolean) =>
-       Array.from(hasMultipleCells ? row.children[0]?.children[0]?.children ?? row.children[0]?.children : row.children);
+        Array.from(hasMultipleCells ? row.children[0]?.children[0]?.children ?? row.children[0]?.children : row.children);
 
 }
