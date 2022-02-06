@@ -11,7 +11,7 @@ export class Html2Unlayer {
         design.body = {
 
             rows: HtmlParser.parseRows(body).map((row: any, i) => {
-                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children??[]));
+                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 return {
                     cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
                     columns: this.getColumns(HtmlParser.parseColumns(row, hasMultipleCells)),
@@ -136,6 +136,10 @@ export class Html2Unlayer {
 
         if (content.querySelector("img")) {
             return "image";
+        }
+
+        if (/(button|btn)/gi.test(content.outerHTML)) {
+            return "button";
         }
 
         return "text";

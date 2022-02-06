@@ -7,7 +7,6 @@ export class HtmlParser {
     static parseBody = (html: string) => this.document = new JSDOM(html).window.document;
 
     static parseRows = (body: HTMLBodyElement | null) => {
-
         const children = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE");
         if (children.length > 1) return Array.from(children);
         let a = children[0];
