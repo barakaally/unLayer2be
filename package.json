@@ -1,14 +1,15 @@
 {
   "name": "unlayer2be",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Unlayer2be is a library which can be used to convert BEE email design to Unlayer email design, or Html to Unlayer design ",
   "main": "lib/src/index.js",
-  "types": "lib/src/index.d.ts",
+  "types": "lib/@types/index.d.ts",
   "scripts": {
     "test": "npm run tsc&&mocha lib/**/*.spec.js",
     "start": "node lib/src/index.js",
+    "copy": "copyfiles ./@types/* ./lib",
     "tsc": "tsc",
-    "build": "npm run tsc"
+    "build": "npm run copy&&tsc"
   },
   "repository": {
     "type": "git",
@@ -28,12 +29,13 @@
   },
   "homepage": "https://github.com/barakaally/unLayer2be#readme",
   "devDependencies": {
-    "@types/jsdom": "^16.2.14",
     "@types/mocha": "^9.1.0",
     "mocha": "^9.2.0",
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@types/jsdom": "^16.2.14",
+    "copyfiles": "^2.4.1",
     "jsdom": "^19.0.0"
   }
 }

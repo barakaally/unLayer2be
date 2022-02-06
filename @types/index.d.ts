@@ -1,5 +1,5 @@
-import { BeeDesign } from "./model/bee.model";
-import { UnlayerDesign } from './model/unlayer.model'
+import {UnlayerDesign} from './unlayer';
+import {BeeDesign} from './bee'
 
 export declare class Unlayer2be {
     /**
