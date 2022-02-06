@@ -1,3 +1,4 @@
+import { JSDOM } from "jsdom";
 import { UnlayerDesign } from "../model/unlayer.model";
 import { HtmlParser } from "../utils/htmlParser";
 
@@ -7,11 +8,11 @@ export class Html2Unlayer {
 
         let design = {} as UnlayerDesign;
         const body = HtmlParser.parseBody(data).querySelector("body");
-
+    
         design.body = {
 
             rows: HtmlParser.parseRows(body).map((row: any, i) => {
-                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children??[]));
+                const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 return {
                     cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
                     columns: this.getColumns(HtmlParser.parseColumns(row, hasMultipleCells)),
@@ -50,11 +51,11 @@ export class Html2Unlayer {
     });
 
     getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
-
+        const type=this.getContentType(content);
         return {
-            type: this.getContentType(content),
+            type: type,
             values: {
-                ...this.getStyle(content.style, content.outerHTML, `u_content_${this.getContentType(content)}_${i + 1}`) as any,
+                ...this.getStyle(type==="button"?content.style._values:content.style, type==="button"?content?.lastElementChild.innerHTML:content.outerHTML, `u_content_${type}_${i + 1}`) as any,
                 ...{
                     src: {
                         url: content?.querySelector("img")?.src,
@@ -136,6 +137,10 @@ export class Html2Unlayer {
 
         if (content.querySelector("img")) {
             return "image";
+        }
+
+        if (/(button|btn)/gi.test(content.outerHTML)) {
+            return "button";
         }
 
         return "text";

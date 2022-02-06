@@ -1,13 +1,16 @@
-import { JSDOM } from "jsdom";
+import { DOMWindow, JSDOM } from "jsdom";
 
 export class HtmlParser {
 
+    static window: DOMWindow;
     static document: Document;
 
-    static parseBody = (html: string) => this.document = new JSDOM(html).window.document;
+    static parseBody = (html: string) => {
+        this.window = new JSDOM(html).window;
+        return this.document = this.window.document;
+    }
 
     static parseRows = (body: HTMLBodyElement | null) => {
-
         const children = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE");
         if (children.length > 1) return Array.from(children);
         let a = children[0];
@@ -46,4 +49,16 @@ export class HtmlParser {
     static parseColumns = (row: Element, hasMultipleCells: boolean) =>
         Array.from(hasMultipleCells ? row.children[0]?.children[0]?.children ?? row.children[0]?.children : row.children);
 
+    static parseInlineStyle(element: Element) {
+
+        let style = {};
+        const style_ = element.getAttribute("style");
+        style_?.split(";").forEach(x => {
+            const key = x.split(":")[0];
+            const value = x.split(":")[1];
+            Object.assign(style, { [key]:value});
+        });
+
+        return style;
+    }
 }
