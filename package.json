@@ -1,7 +1,7 @@
 {
   "name": "unlayer2be",
-  "version": "1.0.0",
-  "description": "Convert Ulayer Email template json formart to Beeefree email template json format and vise-vesa ",
+  "version": "1.0.1",
+  "description": "Unlayer2be is a library which can be used to convert BEE email design to Unlayer email design, or Html to Unlayer design ",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
   "scripts": {
@@ -16,6 +16,8 @@
   },
   "keywords": [
     "unlayer",
+    "unlayer2be",
+    "design",
     "beefree",
     "email-editor"
   ],

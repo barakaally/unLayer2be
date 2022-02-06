@@ -15,6 +15,10 @@ export class Unlayer2be {
      * @returns UnlayerDesign @description Unlayer design Json
      */
     static design = (data: BeeDesign) => new Bee2Unlayer().fromDesign(data);
-
+    /**
+     * @description get unlayer design from html 
+     * @param data HTML  @description Bee design Json
+     * @returns UnlayerDesign @description Unlayer design Json
+     */
     static fromHtml = (data: string) => new Html2Unlayer().from(data);
 }
