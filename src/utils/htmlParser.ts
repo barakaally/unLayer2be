@@ -2,12 +2,6 @@
  *
  */
 
-function parseFromJsDom(html: string) {
-
-    const jsdom = require("jsdom");
-    return new jsdom.JSDOM(html).window.document.querySelector("body");
-}
-
 export function parseHtml(html: string): HTMLBodyElement | null {
 
 
@@ -15,14 +9,17 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 
         try {
 
-            return parseFromJsDom(html);
+           let jsdom= require("jsdom");
+           return new jsdom.JSDOM(html).window.document.querySelector("body");
 
         } catch (f) {
 
             try {
                 const ps = require("child_process");
                 ps.execSync("npm install jsdom");
-                return parseFromJsDom(html);
+                
+                let jsdom= require("jsdom");
+                return new jsdom.JSDOM(html).window.document.querySelector("body");
 
             } catch (e: any) {
 
