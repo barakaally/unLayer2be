@@ -1,28 +1,39 @@
-import { JSDOM } from "jsdom";
 import { UnlayerDesign } from "../model/unlayer.model";
-import { HtmlParser } from "../utils/htmlParser";
+import { parseColumns, parseHtml, parseInlineStyle, parseRows } from "../utils/htmlParser";
 
 export class Html2Unlayer {
 
-    from(data: string) {
+    body: HTMLBodyElement | null;
+
+    /**
+     *
+     */
+    constructor(data: any) {
+        this.body = parseHtml(data);
+
+    }
+
+    getDesign() {
 
         let design = {} as UnlayerDesign;
-        const body = HtmlParser.parseBody(data).querySelector("body");
-    
+
         design.body = {
 
-            rows: HtmlParser.parseRows(body).map((row: any, i) => {
+            rows: parseRows(this.body).map((row: any, i) => {
+
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
+                const columnsBackgroundColor = hasMultipleCells ? this.getColor(row.children[0]?.style["background-color"]) : this.getColor(row?.style["background-color"]);
+
                 return {
                     cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
-                    columns: this.getColumns(HtmlParser.parseColumns(row, hasMultipleCells)),
+                    columns: this.getColumns(parseColumns(row, hasMultipleCells)),
                     values: {
                         ...this.getStyle(row.style, '', `u_row_${i + 1}`) as any,
-                        columnsBackgroundColor: hasMultipleCells ? this.getColor(row.children[0].style["background-color"]) : this.getColor(row.style["background-color"]),
+                        columnsBackgroundColor
                     }
                 }
             }),
-            values: this.getStyle(body?.style, '', `u_body`) as any
+            values: this.getStyle(this.body?.style, '', `u_body`) as any
         };
 
         return design;
@@ -36,14 +47,16 @@ export class Html2Unlayer {
     getCells = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(x?.children)
-            ?.map((y: any) => Number(y.style._values["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
-        return cells[cells.length - 1]?.map(x => !isNaN(x) ? Math.round((x / Math.min(...cells[cells.length - 1]))) : 1) ?? [12];
+            ?.map((y: any) => Number(y?.style["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
+
+        return cells[cells.length - 1]?.map(x => (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[cells.length - 1].map(y => y == 0 ? 12 : y)))) : 12) ?? [12];
 
     }
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
+
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(column?.style, '', `u_column_${i + 1}`) as any,
@@ -51,11 +64,11 @@ export class Html2Unlayer {
     });
 
     getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
-        const type=this.getContentType(content);
+        const type = this.getContentType(content);
         return {
             type: type,
             values: {
-                ...this.getStyle(type==="button"?content.style._values:content.style, type==="button"?content?.lastElementChild.innerHTML:content.outerHTML, `u_content_${type}_${i + 1}`) as any,
+                ...this.getStyle(type === "button" ? content.style._values : content.style, type === "button" ? content?.lastElementChild.innerHTML : content.outerHTML, `u_content_${type}_${i + 1}`) as any,
                 ...{
                     src: {
                         url: content?.querySelector("img")?.src,

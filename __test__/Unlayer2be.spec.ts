@@ -1,6 +1,6 @@
 import asset from 'assert';
 import { BeeDesign } from '../src/model/bee.model';
-import { Unlayer2be } from '../src/utils/Unlayer2be';
+import { Unlayer2be } from '../src/utils/unlayer2be';
 
 describe('Util:Unlayer2be', function () {
 

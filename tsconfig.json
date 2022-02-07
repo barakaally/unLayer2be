@@ -102,6 +102,6 @@
     "src",
     "src/**/*.ts",
     "@types/**/*.d.ts",
-     "__test__/Unlayer2be.spec.ts",
+     "__test__/Unlayer2be.spec.ts", "src/utils/browserify.ts",
   ]
 }

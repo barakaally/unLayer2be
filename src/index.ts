@@ -1,1 +1,1 @@
-export * from "./utils/Unlayer2be";
+export * from "./utils/unlayer2be";
