@@ -9,27 +9,12 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 
         try {
 
-           let jsdom= require("jsdom");
-           return new jsdom.JSDOM(html).window.document.querySelector("body");
+            let jsdom = require("jsdom");
+            return new jsdom.JSDOM(html).window.document.querySelector("body");
 
-        } catch (f) {
+        } catch (e: any) {
 
-            try {
-                const ps = require("child_process");
-                ps.execSync("npm install jsdom");
-                
-                let jsdom= require("jsdom");
-                return new jsdom.JSDOM(html).window.document.querySelector("body");
-
-            } catch (e: any) {
-
-                console.error({
-                    code: e.code,
-                    message: "[**]===> failed to resolve module jsdom  <===[**]"
-                });
-
-                return null;
-            }
+            throw new Error(e.message);
         }
 
     }

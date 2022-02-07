@@ -99,9 +99,10 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
+    "script",
     "src",
     "src/**/*.ts",
-    "@types/**/*.d.ts",
-     "__test__/Unlayer2be.spec.ts", "src/utils/browserify.ts",
+    "src/@types/**/*.d.ts",
+     "__test__/Unlayer2be.spec.ts",
   ]
 }
