@@ -1,15 +1,11 @@
 if (typeof window === "undefined") {
     try {
 
-        let o = "[*]Installing jsdom ..";
-        setInterval(() => {
-            o += ".";
-            console.log(o);
-        }, 1000);
-
+        console.log("[*] Installing jsdom .....");
         const ps = require("child_process");
-        ps.execSync("npm install jsdom@19.0.0");
-        console.log("[+] jsdom@19.0.0");
+        let ins = ps.exec("npm install jsdom@19.0.0");
+        ins.stdout.pipe(process.stdout);
+
     }
     catch (e: any) {
         console.log(e.message);
