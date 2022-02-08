@@ -5,7 +5,8 @@
   "main": "lib/src/index.js",
   "types": "lib/@types/index.d.ts",
   "scripts": {
-    "preinstall": "node lib/script/install-jsdom.js",
+    "postinstall": "npm run --silent install-jsdom",
+    "install-jsdom": "node lib/script/install-jsdom.js",
     "test": "npm run tsc&&mocha lib/**/*.spec.js",
     "start": "node lib/src/index.js",
     "copy": "copyfiles ./src/@types/* ./lib",
