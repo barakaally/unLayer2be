@@ -91,7 +91,10 @@ export class Bee2Unlayer {
         return {
             cells: this.getCells(r.columns),
             columns: this.getColumns(r.columns),
-            values: this.getStyle(r.container.style, '', `u_row_${i + 1}`)
+            values:{
+                ...this.getStyle(r.container.style, '', `u_row_${i + 1}`),
+                columnsBackgroundColor:this.getColor(r.content.style["background-color"]),
+            }
         } as any
     })
 
@@ -196,7 +199,6 @@ export class Bee2Unlayer {
         contentAlign: "center",
         preheaderText: "",
         columns: id_type?.includes("column"),
-        columnsBackgroundColor:this.getColor(style["background-color"]),
         hideDesktop: false,
     }) : {};
     /**
