@@ -9,6 +9,6 @@ export function runOnBrowser(callback: (run: boolean) => void) {
     });
 
     res.stdout.on("end", () => {
-        callback(new RegExp(`(${bundlers.join("|")})`, "gi").test(result));
+        callback(new RegExp(`(${bundlers.join("|")})`, "gi").test(`${result.replace(/\`/g,"")}` ));
     })
 }
