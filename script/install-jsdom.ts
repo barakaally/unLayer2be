@@ -1,13 +1,11 @@
-if (typeof window === "undefined") {
-    try {
+import { runOnBrowser } from "./bundler";
+import ps from 'child_process';
 
-        console.log("[*] Installing jsdom .....");
-        const ps = require("child_process");
-        let ins = ps.exec("npm install jsdom@19.0.0");
-        ins.stdout.pipe(process.stdout);
-
+runOnBrowser(run => {
+    if (!run) {
+        console.log("[*] Installing jsdom");
+        const out = ps.exec("npm install jsdom@19.0.0");
+        out.stdout.pipe(process.stdout);
+        out.stderr.pipe(process.stderr);
     }
-    catch (e: any) {
-        console.log(e.message);
-    }
-}
+})
