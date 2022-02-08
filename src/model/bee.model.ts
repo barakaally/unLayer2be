@@ -67,7 +67,10 @@ export class Descriptor {
     style: Style | any;
     text: Text;
     image: Image;
-    button: Button
+    button: Button;
+    heading:any;
+    html:any;
+    menu:any;
 }
 
 export class Text {

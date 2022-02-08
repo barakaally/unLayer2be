@@ -2,8 +2,14 @@ import { UnlayerDesign } from "../model/unlayer.model";
 import { parseColumns, parseHtml, parseInlineStyle, parseRows } from "../utils/htmlParser";
 
 export class Html2Unlayer {
-
+    private columns: number = 0;
+    private rows: number = 0;
+    private headings: number = 0;
+    private buttons: number = 0;
+    private texts: number = 0;
+    private images: number=0;
     body: HTMLBodyElement | null;
+    
 
     /**
      *
@@ -20,7 +26,7 @@ export class Html2Unlayer {
         design.body = {
 
             rows: parseRows(this.body).map((row: any, i) => {
-
+                this.countElement("row");
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 const columnsBackgroundColor = hasMultipleCells ? this.getColor(row.children[0]?.style["background-color"]) : this.getColor(row?.style["background-color"]);
 
@@ -35,6 +41,17 @@ export class Html2Unlayer {
             }),
             values: this.getStyle(this.body?.style, '', `u_body`) as any
         };
+
+        design.counters = {
+            u_column: this.columns,
+            u_row: this.rows,
+            u_content_button: this.buttons,
+            u_content_heading: this.headings,
+            u_content_text: this.texts,
+            u_content_image: this.images
+        }
+
+        design.schemaVersion = 7;
 
         return design;
     }
@@ -56,7 +73,7 @@ export class Html2Unlayer {
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
-
+        this.countElement("column");
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(column?.style, '', `u_column_${i + 1}`) as any,
@@ -65,6 +82,7 @@ export class Html2Unlayer {
 
     getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
         const type = this.getContentType(content);
+        this.countElement(type);
         return {
             type: type,
             values: {
@@ -145,6 +163,34 @@ export class Html2Unlayer {
      * @returns String
      */
     getColor = (color: string) => color === "transparent" ? "" : color;
+
+
+    /**
+     * 
+     * @param type String @description unlayer element type
+     */
+    countElement(type: string): void {
+        switch (type) {
+            case "row":
+                this.rows += 1;
+                break;
+            case "column":
+                this.columns += 1;
+                break;
+            case "button":
+                this.buttons += 1;
+                break;
+            case "heading":
+                this.headings += 1;
+                break;
+            case "text":
+                this.texts += 1;
+                break;
+            case "image":
+                this.images += 1;
+                break;
+        }
+    }
 
     getContentType = (content: HTMLElement) => {
 

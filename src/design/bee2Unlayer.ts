@@ -9,6 +9,7 @@ export class Bee2Unlayer {
     private headings: number = 0;
     private buttons: number = 0;
     private texts: number = 0;
+    private images: number = 0;
 
     /**
      * 
@@ -16,6 +17,7 @@ export class Bee2Unlayer {
      * @returns UnlayerDesign
      */
     fromDesign = (data: BeeDesign): UnlayerDesign => this.getDesign(data as BeeDesign);
+
     /**
      * 
      * @param data string @description Beefee url encode string
@@ -51,7 +53,7 @@ export class Bee2Unlayer {
 
         let design = {} as UnlayerDesign;
 
-        if(!data["page"])throw new Error("design must have page");
+        if (!data["page"]) throw new Error("design must have page");
 
         Object.entries(data["page"])?.forEach(([key, value]) => {
 
@@ -70,7 +72,8 @@ export class Bee2Unlayer {
                         u_row: this.rows,
                         u_content_button: this.buttons,
                         u_content_heading: this.headings,
-                        u_content_text: this.texts
+                        u_content_text: this.texts,
+                        u_content_image: this.images
                     }
                     break;
                 case "template":
@@ -87,13 +90,13 @@ export class Bee2Unlayer {
      * @returns UnLayer Row[]
      */
     getRows = (rows: Row[]) => rows.map((r, i) => {
-        this.countUnlayerElement("row");
+        this.countElement("row");
         return {
             cells: this.getCells(r.columns),
             columns: this.getColumns(r.columns),
-            values:{
+            values: {
                 ...this.getStyle(r.container.style, '', `u_row_${i + 1}`),
-                columnsBackgroundColor:this.getColor(r.content.style["background-color"]),
+                columnsBackgroundColor: this.getColor(r.content.style["background-color"]),
             }
         } as any
     })
@@ -111,7 +114,7 @@ export class Bee2Unlayer {
      * @returns Unlayer Column[]
      */
     getColumns = (columns: Column[]) => columns.map((c, i) => {
-        this.countUnlayerElement("column");
+        this.countElement("column");
         return {
             contents: this.getContents(c.modules),
             values: this.getStyle(c.style, '', `u_column_${i + 1}`),
@@ -123,26 +126,22 @@ export class Bee2Unlayer {
      * @returns Unlayer Content[]
      */
     getContents = (modules: Module[]) => modules.map((m, i) => {
-        this.countUnlayerElement(m.type.split('-')[m.type.split('-').length - 1]);
+        this.countElement(m.type.split('-')[m.type.split('-').length - 1]);
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
-            values: this.getValues(m.descriptor, `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`)
+            values: {
+                ...this.getStyle(
+                    m.descriptor?.text?.style ??
+                    m.descriptor?.button?.style,
+                    m.descriptor?.text?.html ??
+                    m.descriptor?.button?.label,
+                    `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`),
+                ...this.getImage(m.descriptor?.image?.src),
+                ...this.getButton(m.descriptor?.button?.href, m.descriptor?.button?.style)
+            }
         }
     })
-    /**
-     * 
-     * @param descriptor Descriptor
-     * @returns Unlayer Values
-     */
-    getValues = (descriptor: Descriptor, id_type: string) => Object.assign({}, {
-        ...descriptor.computedStyle,
-        ...this.getStyle(descriptor.style),
-        ...this.getStyle(descriptor?.text?.style ?? descriptor?.button?.style, descriptor?.text?.html ?? descriptor?.button?.label, id_type),
-        ...descriptor?.text?.computedStyle,
-        ...this.getImage(descriptor?.image?.src),
-        ...this.getButton(descriptor?.button?.href, descriptor?.button?.style)
 
-    });
     /**
      * 
      * @param style Style
@@ -212,7 +211,7 @@ export class Bee2Unlayer {
      * 
      * @param type String @description unlayer element type
      */
-    countUnlayerElement(type: string): void {
+    countElement(type: string): void {
         switch (type) {
             case "row":
                 this.rows += 1;
@@ -228,6 +227,9 @@ export class Bee2Unlayer {
                 break;
             case "text":
                 this.texts += 1;
+                break;
+            case "image":
+                this.images += 1;
                 break;
         }
     }
