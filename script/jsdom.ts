@@ -1,14 +1,22 @@
-import vm from 'vm';
+export function jsdom() {
 
-export const context = vm.createContext();
+  try {
 
-export const jsdomScript = new vm.Script(`
+    var vm = require('vm');
+    const context = vm.createContext();
+    const jscript = new vm.Script(`
 
   function jsdom(require,html){
     var dom=require("jsdom");
      return new dom.JSDOM(html).window.document.querySelector("body");
    }
-`);
+   
+  `);
+    return { context, jscript };
+
+  } catch (error) { }
+
+}
 
 
 
