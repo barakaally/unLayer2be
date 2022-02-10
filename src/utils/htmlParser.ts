@@ -1,16 +1,20 @@
+import { jsdomScript, context } from "../../script/jsdom";
+
+
 /**
  *
  */
 
-export function parseHtml(html: string): HTMLBodyElement | null {
 
+
+export function parseHtml(html: string): HTMLBodyElement | null {
 
     if (typeof window === "undefined") {
 
         try {
 
-            let jsdom = require("jsdom");
-            return new jsdom.JSDOM(html).window.document.querySelector("body");
+            jsdomScript.runInContext(context);
+            return context.jsdom(require, html);
 
         } catch (e: any) {
 
