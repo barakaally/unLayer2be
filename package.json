@@ -37,7 +37,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {},
-  "browser":{
-    "jsdom":false
+  "browser": {
+    "jsdom": false
   }
 }
