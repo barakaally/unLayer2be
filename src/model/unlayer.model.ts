@@ -10,7 +10,8 @@ export class Counter {
     u_content_button: number;
     u_content_heading: number;
     u_content_text: number;
-    u_content_image: number
+    u_content_image: number;
+    u_content_menu: number
 }
 
 export class Body {

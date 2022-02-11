@@ -36,7 +36,9 @@
     "mocha": "^9.2.0",
     "typescript": "^4.5.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jsdom": "^19.0.0"
+  },
   "browser": {
     "jsdom": false
   }

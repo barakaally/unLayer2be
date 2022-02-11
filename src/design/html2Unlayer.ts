@@ -1,5 +1,5 @@
 import { UnlayerDesign } from "../model/unlayer.model";
-import { parseColumns, parseHtml, parseInlineStyle, parseRows } from "../utils/htmlParser";
+import { parseColumns, parseHtml, parseInlineStyle, parseRows, findChildren } from "../utils/htmlParser";
 
 export class Html2Unlayer {
     private columns: number = 0;
@@ -8,6 +8,7 @@ export class Html2Unlayer {
     private buttons: number = 0;
     private texts: number = 0;
     private images: number=0;
+    private menus: number=0;
     body: HTMLBodyElement | null;
     
 
@@ -16,7 +17,7 @@ export class Html2Unlayer {
      */
     constructor(data: any) {
         this.body = parseHtml(data);
-
+        
     }
 
     getDesign() {
@@ -29,6 +30,7 @@ export class Html2Unlayer {
                 this.countElement("row");
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 const columnsBackgroundColor = hasMultipleCells ? this.getColor(row.children[0]?.style["background-color"]) : this.getColor(row?.style["background-color"]);
+                
 
                 return {
                     cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
@@ -48,7 +50,8 @@ export class Html2Unlayer {
             u_content_button: this.buttons,
             u_content_heading: this.headings,
             u_content_text: this.texts,
-            u_content_image: this.images
+            u_content_image: this.images,
+            u_content_menu: this.menus
         }
 
         design.schemaVersion = 7;
@@ -80,7 +83,8 @@ export class Html2Unlayer {
         }
     });
 
-    getContents = (column: any) => Array.from(column.children).map((content: any, i) => {
+
+    getContents = (column: any) => Array.from(findChildren(column.children,true)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
         return {
@@ -189,6 +193,9 @@ export class Html2Unlayer {
             case "image":
                 this.images += 1;
                 break;
+            case "menu":
+                this.menus += 1;
+                break;
         }
     }
 
@@ -200,6 +207,14 @@ export class Html2Unlayer {
 
         if (/(button|btn)/gi.test(content.outerHTML)) {
             return "button";
+        }
+
+        if (/menu/gi.test(content.outerHTML)) {
+            return "menu";
+        }
+
+        if (/h[1-6]/gi.test(content.outerHTML)) {
+            return "heading";
         }
 
         return "text";

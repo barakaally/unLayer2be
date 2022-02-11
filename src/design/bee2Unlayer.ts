@@ -10,13 +10,14 @@ export class Bee2Unlayer {
     private buttons: number = 0;
     private texts: number = 0;
     private images: number = 0;
-
+    private menus: number=0;
     /**
      * 
      * @param data BeeDesign
      * @returns UnlayerDesign
      */
     fromDesign = (data: BeeDesign): UnlayerDesign => this.getDesign(data as BeeDesign);
+    
 
     /**
      * 
@@ -73,7 +74,8 @@ export class Bee2Unlayer {
                         u_content_button: this.buttons,
                         u_content_heading: this.headings,
                         u_content_text: this.texts,
-                        u_content_image: this.images
+                        u_content_image: this.images,
+                        u_content_menu:this.menus
                     }
                     break;
                 case "template":

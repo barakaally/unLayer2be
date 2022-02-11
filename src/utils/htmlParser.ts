@@ -4,8 +4,8 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 
         try {
 
-            var dom=require("jsdom");
-             return new dom.JSDOM(html).window.document.querySelector("body");
+            var dom = require("jsdom");
+            return new dom.JSDOM(html).window.document.querySelector("body");
 
         } catch (e: any) {
 
@@ -20,36 +20,33 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 }
 
 export function parseRows(body: HTMLBodyElement | null) {
-    const children = Array.from(body?.children ?? []).filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE");
-    if (children.length > 1) return Array.from(children);
-    let a = children[0];
-    if (a) {
 
-        if (a?.children.length > 1) return Array.from(a.children);
-        let b = a?.children[0]
+    return Array.from(
+        findChildren(
+            Array.from(body?.children ?? [])
+                .filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE")));
+}
 
-        if (b) {
+export function findChildren(children: any[], isContent: boolean = false): any[] {
 
-            if (b?.children.length > 1) return Array.from(b.children);
-            let c = b?.children[0];
-            if (c) {
+    if (
+        (
+            children.length == 1 &&
+            children[0].childElementCount == 1 &&
+            children[0]?.children[0]?.childElementCount == 1 &&
+            !isContent
+        ) ||
+        (
+            children.length == 1 &&
+            isContent
+        )
+    ) {
 
-                if (c?.children.length > 1) return Array.from(c.children)
-                let d = c?.children[0];
-
-                if (d?.children.length > 1) return Array.from(d.children);
-
-                return parseParentChildren(d)
-
-            }
-
-            return parseParentChildren(b)
-        }
-
-        return parseParentChildren(a);
+        return findChildren(children[0]?.children, isContent);
     }
 
-    return [];
+    return children;
+
 }
 
 export function parseParentChildren(element: Element) {
@@ -59,7 +56,10 @@ export function parseParentChildren(element: Element) {
 
 export function parseColumns(row: Element, hasMultipleCells: boolean) {
 
-    return Array.from(hasMultipleCells ? row.children[0]?.children[0]?.children ?? row.children[0]?.children : row.children);
+    return Array.from(
+        hasMultipleCells ?
+            row.children[0]?.children[0]?.children ?? row.children[0]?.children :
+            row.children);
 }
 
 
