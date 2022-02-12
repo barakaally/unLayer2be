@@ -22,37 +22,52 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 export function parseRows(body: HTMLBodyElement | null) {
 
     return Array.from(
-        findChildren(
+        parseChildren(
             Array.from(body?.children ?? [])
-                .filter(x => x.tagName.toUpperCase() != "SCRIPT" && x.tagName.toUpperCase() != "STYLE")));
+                .filter(
+                    x => x.tagName.toUpperCase() != "SCRIPT" &&
+                        x.tagName.toUpperCase() != "STYLE")
+        ));
 }
 
-export function findChildren(children: any[], isContent: boolean = false): any[] {
+export function parseChildren(children: any[], isContent: boolean = false, parent: any = null): any[] {
 
-    if (
-        (
-            children.length == 1 &&
-            children[0].childElementCount == 1 &&
-            children[0]?.children[0]?.childElementCount == 1 &&
-            !isContent
-        ) ||
-        (
-            children.length == 1 &&
-            isContent
-        )
-    ) {
+    if (children.length == 1) {
+        return parseChildren(
+            children[0]?.children,
+            isContent,
+            children[0]);
+    }
 
-        return findChildren(children[0]?.children, isContent);
+    if (!children.length) {
+        return parseParentChildren(parent);
     }
 
     return children;
 
 }
 
-export function parseParentChildren(element: Element) {
-    return Array.from(element?.parentElement?.children ?? []);
+export function parseParentChildren(element: Element): any {
+
+    if (isSubElement(element)) {
+
+        return parseParentChildren(element.parentElement as Element);
+    }
+
+    return Array.from(
+        element?.parentElement?.parentElement?.children ??
+        element?.parentElement?.children ??
+        []);
 }
 
+export function isSubElement(element: Element) {
+
+    return ["SPAN", "TR", "TD", "TBODY", "A"].
+        some(x =>
+            (x == element.parentElement?.tagName?.toUpperCase()) ||
+            (x == element?.parentElement?.parentElement?.tagName?.toUpperCase())
+        );
+}
 
 export function parseColumns(row: Element, hasMultipleCells: boolean) {
 

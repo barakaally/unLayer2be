@@ -1,5 +1,5 @@
 import { UnlayerDesign } from "../model/unlayer.model";
-import { parseColumns, parseHtml, parseInlineStyle, parseRows, findChildren } from "../utils/htmlParser";
+import { parseColumns, parseHtml, parseInlineStyle, parseRows, parseChildren } from "../utils/htmlParser";
 
 export class Html2Unlayer {
     private columns: number = 0;
@@ -7,17 +7,17 @@ export class Html2Unlayer {
     private headings: number = 0;
     private buttons: number = 0;
     private texts: number = 0;
-    private images: number=0;
-    private menus: number=0;
+    private images: number = 0;
+    private menus: number = 0;
     body: HTMLBodyElement | null;
-    
+
 
     /**
      *
      */
     constructor(data: any) {
         this.body = parseHtml(data);
-        
+
     }
 
     getDesign() {
@@ -30,10 +30,9 @@ export class Html2Unlayer {
                 this.countElement("row");
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 const columnsBackgroundColor = hasMultipleCells ? this.getColor(row.children[0]?.style["background-color"]) : this.getColor(row?.style["background-color"]);
-                
 
                 return {
-                    cells: this.getCells(Array.from(hasMultipleCells ? row.children[0].children : row.children)),
+                    cells: this.getCells(Array.from(row.children[0].children)),
                     columns: this.getColumns(parseColumns(row, hasMultipleCells)),
                     values: {
                         ...this.getStyle(row.style, '', `u_row_${i + 1}`) as any,
@@ -84,13 +83,13 @@ export class Html2Unlayer {
     });
 
 
-    getContents = (column: any) => Array.from(findChildren(column.children,true)).map((content: any, i) => {
+    getContents = (column: any) => Array.from(parseChildren(column.children, true)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
         return {
             type: type,
             values: {
-                ...this.getStyle(type === "button" ? content.style._values : content.style, type === "button" ? content?.lastElementChild.innerHTML : content.outerHTML, `u_content_${type}_${i + 1}`) as any,
+                ...this.getStyle(content.style, content.outerHTML, `u_content_${type}_${i + 1}`) as any,
                 ...{
                     src: {
                         url: content?.querySelector("img")?.src,
@@ -199,13 +198,13 @@ export class Html2Unlayer {
         }
     }
 
-    getContentType = (content: HTMLElement) => {
+    getContentType = (content: HTMLElement): any => {
 
         if (content.querySelector("img")) {
             return "image";
         }
 
-        if (/(button|btn)/gi.test(content.outerHTML)) {
+        if (/(class=*button*|class=*btn*)/gi.test(content.outerHTML)) {
             return "button";
         }
 
