@@ -67,23 +67,29 @@ export class Html2Unlayer {
     getCells = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(parseChildren(x.children))
-            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number(y?.style["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
+            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number(y?.style["width"]?.replace(/[a-zA-Z]+/g, ""))));
 
-        return cells[0]?.includes(-1) ? [12] :
-            cells[0]?.length ? cells[0]?.map(x => (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[cells.length - 1].map(y => y == 0 ? 12 : y)))) : 12) :
-                [12];
+        return this.calculateColumnsRatio(cells)
     }
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
         this.countElement("column");
+        const style = column?.style;
         return {
             contents: this.getContents(column) as any[],
-            values: this.getStyle(column?.style, '', `u_column_${i + 1}`) as any,
+            values: this.getStyle(style, '', `u_column_${i + 1}`) as any,
         }
     });
 
+    calculateColumnsRatio = (cells: any[][]) => {
+
+        return cells[0]?.includes(-1) ? [12] :
+            cells[0]?.length ? cells[0]?.map((x: any) =>
+                (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[0].map((y: any) => y == 0 ? 12 : y)))) : 12) :
+                [12];
+    }
 
     getContents = (column: any) => Array.from(parseChildren(column.children)).map((content: any, i) => {
         const type = this.getContentType(content);

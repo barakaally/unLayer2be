@@ -61,10 +61,10 @@ export function isSubElement(element: Element) {
         );
 }
 
-export function addContainer(element: Element, isContent = false): any {
+export function addContainer(element: Element): any {
 
     let container = document.createElement("div");
-    container.setAttribute("class", "unlayer2be");
+    container.setAttribute("class", `unlayer2be`);
     container.innerHTML = element.outerHTML;
     element.parentNode?.replaceChild(container, element);
     return container;
