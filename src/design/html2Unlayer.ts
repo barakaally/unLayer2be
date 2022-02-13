@@ -67,7 +67,7 @@ export class Html2Unlayer {
     getCells = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(parseChildren(x.children))
-            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number((y?.style["width"] ?? y?.style["min-width"])?.replace(/[a-zA-Z]+/g, ""))));
+            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number((y?.style["min-width"] ?? y?.style["width"])?.replace(/[a-zA-Z]+/g, ""))));
 
         return this.calculateColumnsRatio(cells)
     }
@@ -78,7 +78,7 @@ export class Html2Unlayer {
         this.countElement("column");
         const style = column?.style;
         const padding = Array.from(parseChildren(column.children))[0].parentElement.parentElement.style["padding"];
-        style.padding = padding ? padding : "10px 10px 10px 10px";
+        style.padding = padding ? padding :style.padding;
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(style, '', `u_column_${i + 1}`) as any,
