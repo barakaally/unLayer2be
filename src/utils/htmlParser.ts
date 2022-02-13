@@ -53,13 +53,14 @@ export function parseChildren(children: any[], parent: any = null): any[] {
 
 export function isSubElement(element: Element) {
 
-    return ["IMG","SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
+    return ["IMG", "SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
         some(x =>
             (x == element.tagName.toUpperCase()) ||
             (x == element?.parentElement?.tagName?.toUpperCase()) ||
             (x == element?.parentElement?.parentElement?.tagName?.toUpperCase())
         );
 }
+
 
 export function addContainer(element: Element): any {
 

@@ -67,7 +67,7 @@ export class Html2Unlayer {
     getCells = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(parseChildren(x.children))
-            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number(y?.style["width"]?.replace(/[a-zA-Z]+/g, ""))));
+            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number((y?.style["width"] ?? y?.style["min-width"])?.replace(/[a-zA-Z]+/g, ""))));
 
         return this.calculateColumnsRatio(cells)
     }
@@ -77,6 +77,8 @@ export class Html2Unlayer {
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
         this.countElement("column");
         const style = column?.style;
+        const padding = Array.from(parseChildren(column.children))[0].parentElement.parentElement.style["padding"];
+        style.padding = padding ? padding : "10px 10px 10px 10px";
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(style, '', `u_column_${i + 1}`) as any,
@@ -94,11 +96,13 @@ export class Html2Unlayer {
     getContents = (column: any) => Array.from(parseChildren(column.children)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
-
         return {
             type: type,
             values: {
-                ...this.getStyle(content.style, content.outerHTML, `u_content_${type}_${i + 1}`) as any,
+                ...{
+                    ...this.getStyle(content.style, content.outerHTML, `u_content_${type}_${i + 1}`) as any,
+                    containerPadding: "",
+                },
                 ...{
                     src: {
                         url: content?.querySelector("img")?.src,
@@ -117,7 +121,6 @@ export class Html2Unlayer {
     * @returns Unlayer Values
     */
     getStyle = (style: any, text: any = '', id_type?: string) => style ? Object.assign({}, {
-        containerPadding: style?.padding,
         color: this.getColor(style["color"]),
         headingType: "",
         fontFamily: style["font-family"] ? {
