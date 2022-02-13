@@ -29,13 +29,14 @@ export class Html2Unlayer {
             rows: parseRows(this.body).map((row: any, i) => {
                 this.countElement("row");
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
-                const columnsBackgroundColor = hasMultipleCells ? this.getColor(row.children[0]?.style["background-color"]) : this.getColor(row?.style["background-color"]);
+                const columnsBackgroundColor = this.getColor(row?.children[0]?.children[0]?.style["background-color"]);
+                const style = row?.children[0]?.style;
 
                 return {
-                    cells: this.getCells(Array.from(row.children[0].children)),
+                    cells: this.getCells(Array.from(hasMultipleCells ? row.children[0]?.children : row.children)),
                     columns: this.getColumns(parseColumns(row, hasMultipleCells)),
                     values: {
-                        ...this.getStyle(row.style, '', `u_row_${i + 1}`) as any,
+                        ...this.getStyle(style, '', `u_row_${i + 1}`) as any,
                         columnsBackgroundColor
                     }
                 }
@@ -65,11 +66,12 @@ export class Html2Unlayer {
     */
     getCells = (columns: any[]) => {
 
-        const cells = columns?.map(x => Array.from(x?.children)
-            ?.map((y: any) => Number(y?.style["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
+        const cells = columns?.map(x => Array.from(parseChildren(x.children))
+            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number(y?.style["min-width"]?.replace(/[a-zA-Z]+/g, ""))));
 
-        return cells[cells.length - 1]?.map(x => (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[cells.length - 1].map(y => y == 0 ? 12 : y)))) : 12) ?? [12];
-
+        return cells[0]?.includes(-1) ? [12] :
+            cells[0]?.length ? cells[0]?.map(x => (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[cells.length - 1].map(y => y == 0 ? 12 : y)))) : 12) :
+                [12];
     }
 
     hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
@@ -83,9 +85,10 @@ export class Html2Unlayer {
     });
 
 
-    getContents = (column: any) => Array.from(parseChildren(column.children, true)).map((content: any, i) => {
+    getContents = (column: any) => Array.from(parseChildren(column.children)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
+
         return {
             type: type,
             values: {

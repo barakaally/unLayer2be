@@ -4,8 +4,10 @@ export function parseHtml(html: string): HTMLBodyElement | null {
 
         try {
 
-            var dom = require("jsdom");
-            return new dom.JSDOM(html).window.document.querySelector("body");
+            const dom = require("jsdom");
+            const document = new dom.JSDOM(html).window.document;
+            globalThis.document = document;
+            return document.querySelector("body");
 
         } catch (e: any) {
 
@@ -30,51 +32,51 @@ export function parseRows(body: HTMLBodyElement | null) {
         ));
 }
 
-export function parseChildren(children: any[], isContent: boolean = false, parent: any = null): any[] {
+export function parseChildren(children: any[], parent: any = null): any[] {
 
     if (children.length == 1) {
         return parseChildren(
             children[0]?.children,
-            isContent,
             children[0]);
     }
 
-    if (!children.length) {
-        return parseParentChildren(parent);
+    if (!children.length && parent) {
+        return Array.from(
+            addContainer(parent).children)
+            .map((x: any) => isSubElement(x) ? addContainer(x) : x);
     }
 
-    return children;
+    return Array.from(children).map(x => isSubElement(x) ? addContainer(x) : x);
 
 }
 
-export function parseParentChildren(element: Element): any {
-
-    if (isSubElement(element)) {
-
-        return parseParentChildren(element.parentElement as Element);
-    }
-
-    return Array.from(
-        element?.parentElement?.parentElement?.children ??
-        element?.parentElement?.children ??
-        []);
-}
 
 export function isSubElement(element: Element) {
 
-    return ["SPAN", "TR", "TD", "TBODY", "A"].
+    return ["IMG","SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
         some(x =>
-            (x == element.parentElement?.tagName?.toUpperCase()) ||
+            (x == element.tagName.toUpperCase()) ||
+            (x == element?.parentElement?.tagName?.toUpperCase()) ||
             (x == element?.parentElement?.parentElement?.tagName?.toUpperCase())
         );
 }
 
-export function parseColumns(row: Element, hasMultipleCells: boolean) {
+export function addContainer(element: Element, isContent = false): any {
+
+    let container = document.createElement("div");
+    container.setAttribute("class", "unlayer2be");
+    container.innerHTML = element.outerHTML;
+    element.parentNode?.replaceChild(container, element);
+    return container;
+
+}
+
+export function parseColumns(row: Element, hasMultipleCells = false): any[] {
 
     return Array.from(
         hasMultipleCells ?
-            row.children[0]?.children[0]?.children ?? row.children[0]?.children :
-            row.children);
+            row?.children[0]?.children[0]?.children[0]?.children ?? [] :
+            row?.children).map(x => isSubElement(x) ? addContainer(x) : x);
 }
 
 
