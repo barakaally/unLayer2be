@@ -139,7 +139,8 @@ export class Bee2Unlayer {
                     m.descriptor?.button?.label,
                     `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`),
                 ...this.getImage(m.descriptor?.image?.src),
-                ...this.getButton(m.descriptor?.button?.href, m.descriptor?.button?.style)
+                ...this.getButton(m.descriptor?.button?.href, m.descriptor?.button?.style),
+                containerPadding: "",
             }
         }
     })
@@ -151,7 +152,6 @@ export class Bee2Unlayer {
      * @returns Unlayer Values
      */
     getStyle = (style: Style, text: string = '', id_type?: string) => style ? Object.assign({}, {
-        containerPadding: style?.padding,
         color: this.getColor(style.color),
         headingType: "",
         fontFamily: style["font-family"] ? {
