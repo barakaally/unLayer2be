@@ -1,4 +1,5 @@
-const CONTENTS = ["P", "STRONG", "EM", "HR"];
+const CONTENTS = ["P", "HR"];
+const INLINEELEMENTS = ["STRONG", "EM", "BR"];
 
 export function parseHtml(html: string): HTMLBodyElement | null {
 
@@ -67,11 +68,19 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
     if (
         children.length > 1 &&
         CONTENTS.includes(children[0]?.tagName.toUpperCase())) {
-
         return [addContainer(children[0].parentElement)];
     }
 
-    return Array.from(children).map(x => isSubElement(x) ? addContainer(x) : x);
+    if (
+        children.length > 1 &&
+        INLINEELEMENTS.includes(children[0]?.tagName.toUpperCase())) {
+        return [children[0]];
+    }
+  
+    return Array.from(children).map(x =>
+        isSubElement(x) ?
+            addContainer(x) :
+            x);
 
 }
 
@@ -87,9 +96,8 @@ export function isSubElement(element: Element) {
 
 
 export function addContainer(element: Element): any {
-
     let container = document.createElement("div");
-    container.setAttribute("class", `unlayer2be`);
+    container.setAttribute("class", `2be`);
     container.innerHTML = element.outerHTML;
     element.parentNode?.replaceChild(container, element);
     return container;
