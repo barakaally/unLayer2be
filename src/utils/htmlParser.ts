@@ -34,10 +34,18 @@ export function parseRows(body: HTMLBodyElement | null) {
 
 export function parseChildren(children: any[], parent: any = null): any[] {
 
-    if (children.length == 1) {
+    if (children.length == 1 && children[0].tagName.toUpperCase() !== "A") {
+
         return parseChildren(
             children[0]?.children,
             children[0]);
+    }
+
+    if (children.length == 1 && children[0].tagName.toUpperCase() == "A") {
+
+        return Array.from(
+            addContainer(children[0].parentElement).children)
+            .map((x: any) => isSubElement(x) ? addContainer(x) : x);
     }
 
     if (!children.length && parent) {
@@ -56,8 +64,7 @@ export function isSubElement(element: Element) {
     return ["IMG", "SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
         some(x =>
             (x == element.tagName.toUpperCase()) ||
-            (x == element?.parentElement?.tagName?.toUpperCase()) ||
-            (x == element?.parentElement?.parentElement?.tagName?.toUpperCase())
+            (x == element?.parentElement?.tagName?.toUpperCase())
         );
 }
 
