@@ -77,7 +77,7 @@ export class Html2Unlayer {
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
         this.countElement("column");
         const style = column?.style;
-        const padding = Array.from(parseChildren(column.children))[0].parentElement.parentElement.style["padding"];
+        const padding = Array.from(parseChildren(column.children,true))[0].parentElement.parentElement.style["padding"];
         style.padding = padding ? padding :style.padding;
         return {
             contents: this.getContents(column) as any[],
@@ -93,7 +93,7 @@ export class Html2Unlayer {
                 [12];
     }
 
-    getContents = (column: any) => Array.from(parseChildren(column.children)).map((content: any, i) => {
+    getContents = (column: any) => Array.from(parseChildren(column.children,true)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
         return {

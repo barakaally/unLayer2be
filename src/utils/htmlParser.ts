@@ -32,12 +32,18 @@ export function parseRows(body: HTMLBodyElement | null) {
         ));
 }
 
-export function parseChildren(children: any[], parent: any = null): any[] {
+export function parseChildren(children: any[], isContent = false, parent: any = null): any[] {
 
-    if (children.length == 1 && children[0].tagName.toUpperCase() !== "A") {
+    if (
+        children.length == 1 &&
+        children.length == 1 && children[0].tagName.toUpperCase() != "A" &&
+        ((isContent && isSubElement(children[0])) ||
+            (isContent && children[0]?.querySelector("img")) ||
+            !isContent)) {
 
         return parseChildren(
             children[0]?.children,
+            isContent,
             children[0]);
     }
 
