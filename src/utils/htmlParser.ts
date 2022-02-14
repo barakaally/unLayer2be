@@ -1,3 +1,5 @@
+const CONTENTS = ["P", "STRONG", "EM", "HR"];
+
 export function parseHtml(html: string): HTMLBodyElement | null {
 
     if (typeof window === "undefined") {
@@ -36,10 +38,12 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
 
     if (
         children.length == 1 &&
-        children.length == 1 && children[0].tagName.toUpperCase() != "A" &&
+        children.length == 1 &&
+        children[0].tagName.toUpperCase() != "A" &&
+        !CONTENTS.includes(children[0]?.tagName.toUpperCase()) &&
         ((isContent && isSubElement(children[0])) ||
             (isContent && children[0]?.querySelector("img")) ||
-            !isContent)) {
+            (!isContent))) {
 
         return parseChildren(
             children[0]?.children,
@@ -60,6 +64,13 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
             .map((x: any) => isSubElement(x) ? addContainer(x) : x);
     }
 
+    if (
+        children.length > 1 &&
+        CONTENTS.includes(children[0]?.tagName.toUpperCase())) {
+
+        return [addContainer(children[0].parentElement)];
+    }
+
     return Array.from(children).map(x => isSubElement(x) ? addContainer(x) : x);
 
 }
@@ -69,7 +80,7 @@ export function isSubElement(element: Element) {
 
     return ["IMG", "SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
         some(x =>
-            (x == element.tagName.toUpperCase()) ||
+            (x == element?.tagName?.toUpperCase()) ||
             (x == element?.parentElement?.tagName?.toUpperCase())
         );
 }

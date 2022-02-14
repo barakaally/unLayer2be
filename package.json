@@ -1,6 +1,6 @@
 {
   "name": "unlayer2be",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Unlayer2be is a library which can be used to convert BEE email design to Unlayer email design, or Html to Unlayer design ",
   "main": "lib/src/index.js",
   "types": "lib/@types/index.d.ts",
