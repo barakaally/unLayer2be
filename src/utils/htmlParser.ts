@@ -1,5 +1,6 @@
 const CONTENTS = ["P", "HR"];
 const INLINES = ["STRONG", "EM", "BR"];
+const SUBELEMENTS = ["IMG", "SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"];
 
 export function parseHtml(html: string): HTMLBodyElement | null {
 
@@ -94,7 +95,7 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
 
 export function isSubElement(element: Element) {
 
-    return ["IMG", "SPAN", "TR", "TD", "TBODY", "TABLE", "A", "P", "H1", "H2", "H3", "H4", "H5", "H6"].
+    return SUBELEMENTS.
         some(x =>
             (x == element?.tagName?.toUpperCase()) ||
             (x == element?.parentElement?.tagName?.toUpperCase())
