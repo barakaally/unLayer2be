@@ -1,4 +1,4 @@
-# [unLayer2be ![passing](https://raw.githubusercontent.com/barakaally/unLayer2be/master/passing.svg)](https://github.com/barakaally/unLayer2be)
+# [unLayer2be ![passing](https://raw.githubusercontent.com/barakaally/unLayer2be/master/passing.svg)](https://www.npmjs.com/package/unlayer2be)
 Unlayer2be is a library which can be used to convert BEE email design to Unlayer email design, or Html  to Unlayer design for unLayer email editor.
 
 ## Installations
