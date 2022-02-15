@@ -1,5 +1,5 @@
 const CONTENTS = ["P", "HR"];
-const INLINEELEMENTS = ["STRONG", "EM", "BR"];
+const INLINES = ["STRONG", "EM", "BR"];
 
 export function parseHtml(html: string): HTMLBodyElement | null {
 
@@ -42,6 +42,7 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
         children.length == 1 &&
         children[0].tagName.toUpperCase() != "A" &&
         !CONTENTS.includes(children[0]?.tagName.toUpperCase()) &&
+        !INLINES.includes(children[0]?.tagName.toUpperCase()) &&
         ((isContent && isSubElement(children[0])) ||
             (isContent && children[0]?.querySelector("img")) ||
             (!isContent))) {
@@ -52,7 +53,10 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
             children[0]);
     }
 
-    if (children.length == 1 && children[0].tagName.toUpperCase() == "A") {
+    if (
+        children.length == 1 &&
+        children[0].tagName.toUpperCase() == "A"
+    ) {
 
         return Array.from(
             addContainer(children[0].parentElement).children)
@@ -65,18 +69,21 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
             .map((x: any) => isSubElement(x) ? addContainer(x) : x);
     }
 
-    if (
-        children.length > 1 &&
-        CONTENTS.includes(children[0]?.tagName.toUpperCase())) {
+
+    if (CONTENTS.some(x =>
+        Array.from(children).map(y =>
+            y.tagName.toUpperCase()).includes(x))) {
+
         return [addContainer(children[0].parentElement)];
     }
 
-    if (
-        children.length > 1 &&
-        INLINEELEMENTS.includes(children[0]?.tagName.toUpperCase())) {
-        return [children[0]];
+    if (INLINES.some(x =>
+        Array.from(children).map(y =>
+            y.tagName.toUpperCase()).includes(x))) {
+
+        return Array.from(children[0].parentElement);
     }
-  
+
     return Array.from(children).map(x =>
         isSubElement(x) ?
             addContainer(x) :
@@ -97,7 +104,7 @@ export function isSubElement(element: Element) {
 
 export function addContainer(element: Element): any {
     let container = document.createElement("div");
-    container.setAttribute("class", `2be`);
+    container.setAttribute("class", `unlayer2be`);
     container.innerHTML = element.outerHTML;
     element.parentNode?.replaceChild(container, element);
     return container;
