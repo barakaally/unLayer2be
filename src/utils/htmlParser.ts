@@ -72,15 +72,15 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
 
 
     if (CONTENTS.some(x =>
-        Array.from(children).map(y =>
-            y.tagName.toUpperCase()).includes(x))) {
+        Array.from(children)
+            .map(y => y.tagName.toUpperCase()).includes(x))) {
 
         return [addContainer(children[0].parentElement)];
     }
 
     if (INLINES.some(x =>
-        Array.from(children).map(y =>
-            y.tagName.toUpperCase()).includes(x))) {
+        Array.from(children)
+            .map(y => y.tagName.toUpperCase()).includes(x))) {
 
         return Array.from(children[0].parentElement);
     }
