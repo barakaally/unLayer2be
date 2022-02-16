@@ -10,14 +10,14 @@ export class Bee2Unlayer {
     private buttons: number = 0;
     private texts: number = 0;
     private images: number = 0;
-    private menus: number=0;
+    private menus: number = 0;
     /**
      * 
      * @param data BeeDesign
      * @returns UnlayerDesign
      */
     fromDesign = (data: BeeDesign): UnlayerDesign => this.getDesign(data as BeeDesign);
-    
+
 
     /**
      * 
@@ -75,7 +75,7 @@ export class Bee2Unlayer {
                         u_content_heading: this.headings,
                         u_content_text: this.texts,
                         u_content_image: this.images,
-                        u_content_menu:this.menus
+                        u_content_menu: this.menus
                     }
                     break;
                 case "template":
@@ -128,23 +128,28 @@ export class Bee2Unlayer {
      * @returns Unlayer Content[]
      */
     getContents = (modules: Module[]) => modules.map((m, i) => {
+        console.log(m.descriptor.style);
         this.countElement(m.type.split('-')[m.type.split('-').length - 1]);
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
             values: {
                 ...this.getStyle(
                     m.descriptor?.text?.style ??
-                    m.descriptor?.button?.style,
+                    m.descriptor?.button?.style ??
+                    m.descriptor?.image?.style,
                     m.descriptor?.text?.html ??
-                    m.descriptor?.button?.label,
+                    m.descriptor?.button?.label
+                    ,
                     `u_content_${m.type.split('-')[m.type.split('-').length - 1]}_${i + 1}`),
-                ...this.getImage(m.descriptor?.image?.src),
+                ...this.getImage(m.descriptor?.image?.src, m.descriptor.computedStyle?.width, m.descriptor.computedStyle?.height),
                 ...this.getButton(m.descriptor?.button?.href, m.descriptor?.button?.style),
-                containerPadding: "",
+                containerPadding: this.getContainerPadding(m.descriptor.style),
             }
         }
     })
 
+    getContainerPadding = (style: Style) => `${style["padding-top"]} ${style["padding-right"]} ${style["padding-bottom"]} ${style["padding-left"]}`;
+    
     /**
      * 
      * @param style Style

@@ -89,6 +89,7 @@ export class Image {
     alt: string | "Image";
     href: string;
     src: string;
+    style:Style
 }
 
 export class Style {
