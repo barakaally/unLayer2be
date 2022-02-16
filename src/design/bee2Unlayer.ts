@@ -128,7 +128,6 @@ export class Bee2Unlayer {
      * @returns Unlayer Content[]
      */
     getContents = (modules: Module[]) => modules.map((m, i) => {
-        console.log(m.descriptor.style);
         this.countElement(m.type.split('-')[m.type.split('-').length - 1]);
         return {
             type: m.type.split('-')[m.type.split('-').length - 1],
@@ -149,7 +148,7 @@ export class Bee2Unlayer {
     })
 
     getContainerPadding = (style: Style) => `${style["padding-top"]} ${style["padding-right"]} ${style["padding-bottom"]} ${style["padding-left"]}`;
-    
+
     /**
      * 
      * @param style Style
