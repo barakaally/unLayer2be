@@ -112,14 +112,17 @@ export class Html2Unlayer {
                     ...this.getStyle(content.style, content.outerHTML, `u_content_${type}_${i + 1}`) as any,
                     containerPadding: "",
                 },
-                ...{
-                    src: {
-                        url: content?.querySelector("img")?.src,
-                        width: content?.querySelector("img")?.width ?? "auto",
-                        height: content?.querySelector("img")?.height ?? "auto",
-                    }
-                }
+                ...this.getImage(content)
             }
+        }
+    });
+
+
+    getImage = (content: Element) => Object.assign({}, {
+        src: {
+            url: content?.querySelector("img")?.src,
+            width: content?.querySelector("img")?.width ? content?.querySelector("img")?.width : "auto",
+            height: content?.querySelector("img")?.height ? content?.querySelector("img")?.height : "auto",
         }
     });
 
