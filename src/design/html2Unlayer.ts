@@ -74,7 +74,9 @@ export class Html2Unlayer {
     hasMultipleCell = (columns: any[]) => {
 
         const cells = columns?.map(x => Array.from(parseChildren(x.children))
-            ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number((y?.style["min-width"] ?? y?.style["width"])?.replace(/[a-zA-Z]+/g, ""))));
+            ?.map((y: any) =>
+                y.classList.contains("unlayer2be") ? -1 : Number((y?.style["min-width"] ??
+                    y?.style["width"])?.replace(/[a-zA-Z]+/g, ""))));
 
         return cells[0].length > 1;
     }
@@ -99,8 +101,10 @@ export class Html2Unlayer {
     }
 
     getContents = (column: any) => Array.from(parseChildren(column.children, true)).map((content: any, i) => {
+
         const type = this.getContentType(content);
         this.countElement(type);
+
         return {
             type: type,
             values: {
@@ -111,8 +115,8 @@ export class Html2Unlayer {
                 ...{
                     src: {
                         url: content?.querySelector("img")?.src,
-                        width: "auto",
-                        height: "auto"
+                        width: content?.querySelector("img")?.width ?? "auto",
+                        height: content?.querySelector("img")?.height ?? "auto",
                     }
                 }
             }

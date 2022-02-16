@@ -123,7 +123,7 @@ export function parseColumns(row: Element, hasMultipleCells = false): any[] {
 
 export function parseInlineStyle(element: Element): any {
     let style = {};
-    const style_ = element.getAttribute("style");
+    const style_ = element?.getAttribute("style");
     style_?.split(";").forEach(x => {
         const key = x.split(":")[0];
         const value = x.split(":")[1];
