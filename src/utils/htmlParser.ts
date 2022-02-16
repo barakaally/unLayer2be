@@ -39,9 +39,9 @@ export function parseRows(body: HTMLBodyElement | null) {
 export function parseChildren(children: any[], isContent = false, parent: any = null): any[] {
 
     if (
-        children.length == 1 &&
-        children.length == 1 &&
-        children[0].tagName.toUpperCase() != "A" &&
+        children?.length == 1 &&
+        children?.length == 1 &&
+        children[0]?.tagName?.toUpperCase() != "A" &&
         !CONTENTS.includes(children[0]?.tagName.toUpperCase()) &&
         !INLINES.includes(children[0]?.tagName.toUpperCase()) &&
         ((isContent && isSubElement(children[0])) ||
@@ -55,7 +55,7 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
     }
 
     if (
-        children.length == 1 &&
+        children?.length == 1 &&
         children[0].tagName.toUpperCase() == "A"
     ) {
 
@@ -64,7 +64,7 @@ export function parseChildren(children: any[], isContent = false, parent: any = 
             .map((x: any) => isSubElement(x) ? addContainer(x) : x);
     }
 
-    if (!children.length && parent) {
+    if (!children?.length && parent) {
         return Array.from(
             addContainer(parent).children)
             .map((x: any) => isSubElement(x) ? addContainer(x) : x);

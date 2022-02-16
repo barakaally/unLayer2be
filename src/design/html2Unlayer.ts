@@ -31,10 +31,11 @@ export class Html2Unlayer {
                 const hasMultipleCells = this.hasMultipleCell(Array.from(row.children[0]?.children ?? []));
                 const columnsBackgroundColor = this.getColor(row?.children[0]?.children[0]?.style["background-color"]);
                 const style = row?.children[0]?.style;
+                const columns = this.getColumns(parseColumns(row, hasMultipleCells));
 
                 return {
-                    cells: this.getCells(Array.from(hasMultipleCells ? row.children[0]?.children : row.children)),
-                    columns: this.getColumns(parseColumns(row, hasMultipleCells)),
+                    cells: this.getCells(columns),
+                    columns: columns,
                     values: {
                         ...this.getStyle(style, '', `u_row_${i + 1}`) as any,
                         columnsBackgroundColor
@@ -66,34 +67,38 @@ export class Html2Unlayer {
     */
     getCells = (columns: any[]) => {
 
+        const cells = columns.map(x => Number(x.values.size["width"]?.replace(/[a-zA-Z]+/g, "")));
+        return this.calculateColumnsRatio(cells);
+    }
+
+    hasMultipleCell = (columns: any[]) => {
+
         const cells = columns?.map(x => Array.from(parseChildren(x.children))
             ?.map((y: any) => y.classList.contains("unlayer2be") ? -1 : Number((y?.style["min-width"] ?? y?.style["width"])?.replace(/[a-zA-Z]+/g, ""))));
 
-        return this.calculateColumnsRatio(cells)
+        return cells[0].length > 1;
     }
-
-    hasMultipleCell = (columns: any[]) => this.getCells(columns).length > 1;
 
     getColumns = (columns: any[]) => Array.from(columns).map((column: any, i) => {
         this.countElement("column");
         const style = column?.style;
-        const padding = Array.from(parseChildren(column.children,true))[0].parentElement.parentElement.style["padding"];
-        style.padding = padding ? padding :style.padding;
+        const padding = Array.from(parseChildren(column.children, true))[0].parentElement.parentElement.style["padding"];
+        style.padding = padding ? padding : style.padding;
         return {
             contents: this.getContents(column) as any[],
             values: this.getStyle(style, '', `u_column_${i + 1}`) as any,
         }
     });
 
-    calculateColumnsRatio = (cells: any[][]) => {
+    calculateColumnsRatio = (cells: any[]) => {
 
-        return cells[0]?.includes(-1) ? [12] :
-            cells[0]?.length ? cells[0]?.map((x: any) =>
-                (!isNaN(x) && x) ? Math.round((x / Math.min(...cells[0].map((y: any) => y == 0 ? 12 : y)))) : 12) :
+        return cells?.includes(-1) ? [12] :
+            cells?.length ? cells?.map((x: any) =>
+                (!isNaN(x) && x) ? Math.round((x / Math.min(...cells.map((y: any) => y == 0 ? 1 : y)))) : 12) :
                 [12];
     }
 
-    getContents = (column: any) => Array.from(parseChildren(column.children,true)).map((content: any, i) => {
+    getContents = (column: any) => Array.from(parseChildren(column.children, true)).map((content: any, i) => {
         const type = this.getContentType(content);
         this.countElement(type);
         return {
@@ -144,7 +149,7 @@ export class Html2Unlayer {
         text: text,
         size: {
             autoWidth: true,
-            width: style?.width
+            width: (style?.width != '' && style?.width != null) ? style.width : style["min-width"]
         },
         padding: style["padding"],
         border: {
